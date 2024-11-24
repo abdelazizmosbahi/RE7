@@ -1,11 +1,4 @@
 <?php
-
-namespace App\Models;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-use Illuminate\Database\Eloquent\Model;
-
-// Categorie.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,3 +15,4 @@ class Categorie extends Model
         return $this->hasMany(SousCategorie::class);
     }
 }
+

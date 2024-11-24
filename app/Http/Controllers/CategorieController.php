@@ -1,51 +1,52 @@
 <?php
-
 namespace App\Http\Controllers;
+
 use App\Models\Categorie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CategorieController extends Controller
 {
     public function addCategorie(Request $request)
     {
-        // Validate input
+        Log::info('Add Categorie Request', $request->all());
+
         $request->validate([
             'titre' => 'required|string|max:255',
             'image' => 'required|string|max:50'
         ]);
-    
+
         $categorie = Categorie::create([
             'titre' => $request->titre,
             'image' => $request->image
         ]);
-    
-        return response($categorie, 201);
-    }
-    
-    public function deleteCategorie($id)
-{
-    // Find the category by ID
-    $categorie = Categorie::find($id);
 
-    // Check if the category exists
-    if (!$categorie) {
-        return response()->json(['message' => 'Category not found'], 404);
+        return response()->json($categorie, 201);
     }
 
-    // Delete the category
-    $categorie->delete();
-
-    // Return a success response
-    return response()->json(['message' => 'Category deleted successfully'], 200);
-}
-
-
-public function updateCategorie(Request $request, $id)
+    public function deleteCategorie(Request $request)
+    {
+        $id = $request->input('id'); // Get the 'id' from the form
+    
+        Log::info("Delete Categorie ID: $id");
+    
+        $categorie = Categorie::find($id);
+    
+        if (!$categorie) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+    
+        $categorie->delete();
+        return response()->json(['message' => 'Category deleted successfully'], 200);
+    }
+    
+    public function updateCategorie(Request $request)
 {
-    // Find the category by ID
+    $id = $request->input('id'); // Get the 'id' from the form
+    Log::info("Updating Categorie ID: $id", $request->all());
+
     $categorie = Categorie::find($id);
 
-    // Check if the category exists
     if (!$categorie) {
         return response()->json(['message' => 'Category not found'], 404);
     }
@@ -59,36 +60,29 @@ public function updateCategorie(Request $request, $id)
     // Update the category with the validated data
     $categorie->update($validated);
 
-    // Return a success response
     return response()->json(['message' => 'Category updated successfully', 'category' => $categorie], 200);
 }
 
-// public function getAllCategories()
-// {
-//     // Retrieve all categories
-//     $categories = Categorie::all();
+    public function getAllCategories()
+    {
+        Log::info('Fetching all categories');
 
-//     // Return the categories as a JSON response
-//     return response()->json($categories, 200);
-// }
-public function getAllCategories()
+        $categories = Categorie::all();
+        return response()->json($categories, 200);
+    }
+
+    public function getCategorieById(Request $request)
 {
-    $categories = Categorie::all(); // Retrieve all categories
-    return view('admin.CategorieAdmin', compact('categories')); // Pass the categories data to the view
-}
+    $id = $request->input('id'); // Get the 'id' from the query string
 
+    Log::info("Fetching Categorie ID: $id");
 
-public function getCategorieById($id)
-{
-    // Find the category by ID
     $categorie = Categorie::find($id);
 
-    // If the category doesn't exist, return a 404 response
     if (!$categorie) {
         return response()->json(['message' => 'Category not found'], 404);
     }
 
-    // Return the category as a JSON response
     return response()->json($categorie, 200);
 }
 

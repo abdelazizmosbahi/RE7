@@ -64,13 +64,10 @@ Route::get('/user/souscategorie', function () {
 
 
 
-
-
-////apis
-// Routes for Categories
+// Admin API Routes for Categories
 
 Route::post('/admin/add-categorie', [CategorieController::class, 'addCategorie']);
-Route::delete('/admin/delete-categorie/{id}', [CategorieController::class, 'deleteCategorie']);
-Route::put('/admin/update-categorie/{id}', [CategorieController::class, 'updateCategorie']);
+Route::delete('/admin/delete-categorie', [CategorieController::class, 'deleteCategorie']);
+Route::put('/admin/update-categorie', [CategorieController::class, 'updateCategorie']);
 Route::get('/admin/get-all-categories', [CategorieController::class, 'getAllCategories']);
-Route::get('/admin/get-categorie-by-id/{id}', [CategorieController::class, 'getCategorieById']);
+Route::get('/admin/get-categorie-by-id', [CategorieController::class, 'getCategorieById']);
