@@ -1,16 +1,76 @@
-<!-- Add Navigation Buttons to Other Pages -->
-<div>
-    <h1> admin - souscategorie</h1>
-    <a href="/welcome">Go to Welcome</a><br>
-    <a href="/admin/categorie">Go to Admin - ajouter Categories</a><br>
-    <a href="/admin/consulter-list-recette">Go to Admin - View Recipe List</a><br>
-    <a href="/admin/consulter-recette">Go to Admin - View Recipe</a><br>
-    <a href="/admin/modifier-recette">Go to Admin - Edit Recipe</a><br>
-    <a href="/admin/souscategorie">Go to Admin - Subcategories</a><br>
-    <a href="/user/ajouter-recette">Go to User - Add Recipe</a><br>
-    <a href="/user/categorie">Go to User - Categories</a><br>
-    <a href="/user/consulter-list-recette">Go to User - View Recipe List</a><br>
-    <a href="/user/consulter-recette">Go to User - View Recipe</a><br>
-    <a href="/user/mes-recettes">Go to User - My Recipes</a><br>
-    <a href="/user/souscategorie">Go to User - Subcategories</a><br>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Sous Categorie</title>
+</head>
+<body>
+    <h1>Add Sous Categorie</h1>
+
+    <!-- Form to add Sous Categorie -->
+    <form action="/admin/add-sous-categorie" method="POST">
+        @csrf
+        <h3>Fill out the details for the new Sous Categorie</h3>
+
+        <!-- Input for the titre -->
+        <input type="text" name="titre" placeholder="Titre" required>
+
+        <!-- Input for the image -->
+        <input type="text" name="image" placeholder="Image" required>
+
+        <!-- Dropdown to select the parent category -->
+        <select name="categorie_id" required>
+            <option value="" disabled selected>Select a Category</option>
+            @foreach($categories as $categorie)
+                <option value="{{ $categorie->id }}">{{ $categorie->titre }}</option>
+            @endforeach
+        </select>
+
+        <button type="submit">Add Sous Categorie</button>
+    </form>
+
+
+    <!-- Get All Sous Categories -->
+<a href="/admin/get-all-sous-categories">View All Sous Categories</a>
+<!-- Get Sous Categorie By ID -->
+<form action="/admin/get-sous-categorie-by-id/" method="GET" onsubmit="this.action = this.action + document.getElementById('sousCategorieId').value">
+    <h3>Get Sous Categorie By ID</h3>
+    <input type="number" id="sousCategorieId" name="id" placeholder="Enter Sous Categorie ID" required>
+    <button type="submit">Get Sous Categorie</button>
+</form>
+<!-- Delete Sous Categorie -->
+<form action="/admin/delete-sous-categorie" method="POST">
+    @csrf
+    @method('DELETE')
+    <h3>Delete Sous Categorie</h3>
+    <input type="number" name="id" placeholder="Enter Sous Categorie ID to Delete" required>
+    <button type="submit">Delete</button>
+</form>
+<!-- Update Sous Categorie -->
+<form action="/admin/update-sous-categorie" method="POST">
+    @csrf
+    @method('PUT')
+    <h3>Update Sous Categorie</h3>
+    
+    <!-- Input for the ID -->
+    <input type="number" name="id" placeholder="Enter Sous Categorie ID to Update" required>
+    
+    <!-- Input for the title -->
+    <input type="text" name="titre" placeholder="Enter New Title" required>
+    
+    <!-- Input for the image -->
+    <input type="text" name="image" placeholder="Enter New Image URL" required>
+
+    <!-- Input for the category ID -->
+    <select name="categorie_id" required>
+        <option value="" disabled selected>Select a Category</option>
+        @foreach($categories as $categorie)
+            <option value="{{ $categorie->id }}">{{ $categorie->titre }}</option>
+        @endforeach
+    </select>
+    <button type="submit">Update</button>
+</form>
+
+</body>
+</html>

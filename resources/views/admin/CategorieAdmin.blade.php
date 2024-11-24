@@ -6,7 +6,7 @@
     <a href="/admin/consulter-list-recette">Go to Admin - View Recipe List</a><br>
     <a href="/admin/consulter-recette">Go to Admin - View Recipe</a><br>
     <a href="/admin/modifier-recette">Go to Admin - Edit Recipe</a><br>
-    <a href="/admin/souscategorie">Go to Admin - Subcategories</a><br>
+    <a href="/admin/add-sous-categorie">Go to Admin - Subcategories</a><br>
     <a href="/user/ajouter-recette">Go to User - Add Recipe</a><br>
     <a href="/user/categorie">Go to User - Categories</a><br>
     <a href="/user/consulter-list-recette">Go to User - View Recipe List</a><br>

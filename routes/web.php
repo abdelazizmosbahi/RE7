@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\SousCategorieController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -71,3 +72,14 @@ Route::delete('/admin/delete-categorie', [CategorieController::class, 'deleteCat
 Route::put('/admin/update-categorie', [CategorieController::class, 'updateCategorie']);
 Route::get('/admin/get-all-categories', [CategorieController::class, 'getAllCategories']);
 Route::get('/admin/get-categorie-by-id', [CategorieController::class, 'getCategorieById']);
+
+
+// sub categorie admin routes
+Route::post('/admin/add-sous-categorie', [SousCategorieController::class, 'addSousCategorie']);
+Route::put('/admin/update-sous-categorie', [SousCategorieController::class, 'updateSousCategorie']);
+Route::delete('/admin/delete-sous-categorie', [SousCategorieController::class, 'deleteSousCategorie']);
+Route::get('/admin/get-all-sous-categories', [SousCategorieController::class, 'getAllSousCategories']);
+Route::get('/admin/get-sous-categorie-by-id', [SousCategorieController::class, 'getSousCategorieById']);
+Route::get('/admin/get-sous-categorie-by-id/{id}', [SousCategorieController::class, 'getSousCategorieById']);
+Route::get('/admin/add-sous-categorie', [SousCategorieController::class, 'showAddSousCategorieForm']);
+
