@@ -54,7 +54,7 @@ class CategorieController extends Controller
     // Validate the incoming request
     $validated = $request->validate([
         'titre' => 'required|string|max:255',
-        'image' => 'required|string|max:50'
+        'image' => 'required|string|max:500'
     ]);
 
     // Update the category with the validated data

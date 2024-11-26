@@ -83,6 +83,7 @@
             <div id="all-categories-list" class="mt-3"></div>
         </div>
 
+
         <!-- Get Categorie By ID -->
         <div class="card">
             <div class="card-header">Get Categorie By ID</div>
@@ -155,23 +156,49 @@
         });
 
         // Handle Get All Categories
-        $('#get-all-categories-btn').click(function() {
-            $.ajax({
-                url: '/admin/get-all-categories',
-                method: 'GET',
-                success: function(response) {
-                    let categoriesList = '<ul>';
-                    response.forEach(function(category) {
-                        categoriesList += '<li>' + category.titre + ' - ' + category.image + '</li>';
+        document.getElementById('get-all-categories-btn').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the page from refreshing
+        fetch('/admin/get-all-categories')
+            .then(response => response.json())
+            .then(categories => {
+                const listDiv = document.getElementById('all-categories-list');
+                listDiv.innerHTML = ''; // Clear the previous list
+                
+                if (categories.length > 0) {
+                    const list = document.createElement('ul');
+                    list.className = 'list-group';
+                    
+                    categories.forEach(category => {
+                        const listItem = document.createElement('li');
+                        listItem.className = 'list-group-item';
+                        
+                        // Add category title
+                        const title = document.createElement('strong');
+                        title.textContent = category.titre;
+                        listItem.appendChild(title);
+                        
+                        // Add category image
+                        const image = document.createElement('img');
+                        image.src = category.image;
+                        image.alt = category.titre;
+                        image.style.maxWidth = '150px';
+                        image.style.display = 'block';
+                        image.style.marginTop = '10px';
+                        listItem.appendChild(image);
+                        
+                        list.appendChild(listItem);
                     });
-                    categoriesList += '</ul>';
-                    $('#all-categories-list').html(categoriesList);
-                },
-                error: function(xhr, status, error) {
-                    alert("Error: " + xhr.responseText);
+                    
+                    listDiv.appendChild(list);
+                } else {
+                    listDiv.innerHTML = '<p>No categories found.</p>';
                 }
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
+                document.getElementById('all-categories-list').innerHTML = '<p class="text-danger">Failed to load categories.</p>';
             });
-        });
+    });
 
         // Handle Get Categorie By ID
          // Handle the form submission using AJAX
