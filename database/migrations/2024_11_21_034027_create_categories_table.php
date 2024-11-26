@@ -10,7 +10,7 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('titre'); // Changed to string for consistency
-            $table->string('image', 50);
+            $table->string('image', 500);
             $table->timestamps();
         });
     }

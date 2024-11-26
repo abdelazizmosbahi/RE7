@@ -13,7 +13,7 @@ class CategorieController extends Controller
 
         $request->validate([
             'titre' => 'required|string|max:255',
-            'image' => 'required|string|max:50'
+            'image' => 'required|string|max:500'
         ]);
 
         $categorie = Categorie::create([
