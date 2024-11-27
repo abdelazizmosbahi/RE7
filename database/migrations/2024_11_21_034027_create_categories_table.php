@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -9,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('titre'); // Changed to string for consistency
-            $table->string('image', 500);
-            $table->timestamps();
+            $table->string('titre'); // Title of the category
+            $table->string('image', 500); // Image path (increased length if needed)
+            $table->timestamps(); // Timestamps for created_at and updated_at
         });
     }
 
