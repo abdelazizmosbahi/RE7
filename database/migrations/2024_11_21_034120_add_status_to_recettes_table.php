@@ -4,29 +4,44 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-//     public function up()
+// return new class extends Migration
+// {
+// public function up()
+// {
+//     if (!Schema::hasColumn('recettes', 'status')) {
+//         Schema::table('recettes', function (Blueprint $table) {
+//             $table->string('status')->default('en cours')->notNullable();
+//         });
+//     }
+// }
+
+// public function down()
 // {
 //     Schema::table('recettes', function (Blueprint $table) {
-//         $table->string('status')->default('en cours'); // Définir un statut par défaut
+//         $table->dropColumn('status');
 //     });
 // }
 
-public function up()
+// };
+
+return new class extends Migration
 {
-    if (!Schema::hasColumn('recettes', 'status')) {
+    public function up()
+    {
         Schema::table('recettes', function (Blueprint $table) {
-            $table->string('status')->default('en cours')->notNullable();
+            if (!Schema::hasColumn('recettes', 'status')) {
+                $table->string('status')->default('en cours'); // Définir un statut par défaut
+            }
         });
     }
-}
 
-public function down()
-{
-    Schema::table('recettes', function (Blueprint $table) {
-        $table->dropColumn('status');
-    });
-}
-
+    public function down()
+    {
+        Schema::table('recettes', function (Blueprint $table) {
+            if (Schema::hasColumn('recettes', 'status')) {
+                $table->dropColumn('status');
+            }
+        });
+    }
 };
+

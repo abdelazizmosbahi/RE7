@@ -16,13 +16,26 @@ class SousCategorieController extends Controller
     {
         // Validate incoming request
         $validated = $request->validate([
-            'titre' => 'required|string|max:255',
-            'image' => 'required|string|max:255',
+            'titre' => 'required|string|max:255|unique:sous_categories,titre', // Ensure titre is unique
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate the image file
             'categorie_id' => 'required|exists:categories,id' // Ensure the categorie_id exists
+        ], [
+            'titre.unique' => 'This sous-categorie title already exists. Please choose another.',
         ]);
 
-        // Create the SousCategorie
-        $sousCategorie = SousCategorie::create($validated);
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('uploads', 'public'); // Save in the 'storage/app/public/uploads' folder
+        } else {
+            return response()->json(['message' => 'Image upload failed'], 400);
+        }
+
+        // Create the SousCategorie with validated data and image path
+        $sousCategorie = SousCategorie::create([
+            'titre' => $validated['titre'],
+            'image' => $imagePath,
+            'categorie_id' => $validated['categorie_id']
+        ]);
 
         // Retrieve the associated category title
         $categorie = Categorie::find($sousCategorie->categorie_id);
@@ -35,6 +48,9 @@ class SousCategorieController extends Controller
         ], 201);
     }
 
+    /**
+     * Get all sous categories
+     */
     public function getAllSousCategories()
     {
         // Retrieve all sous categories
@@ -43,50 +59,67 @@ class SousCategorieController extends Controller
         // Return the sous categories in a JSON format
         return response()->json($sousCategories, 200);
     }
-    
 
+    /**
+     * Get a sous categorie by ID
+     */
     public function getSousCategorieById(Request $request)
-{
-    $id = $request->input('id');
-    $sousCategorie = SousCategorie::find($id);
+    {
+        $id = $request->input('id');
+        $sousCategorie = SousCategorie::find($id);
 
-    if (!$sousCategorie) {
-        return response()->json(['message' => 'Sous-categorie not found'], 404);
+        if (!$sousCategorie) {
+            return response()->json(['message' => 'Sous-categorie not found'], 404);
+        }
+
+        return response()->json($sousCategorie, 200);
     }
 
-    return response()->json($sousCategorie, 200);
-}
+    /**
+     * Update a sous-categorie
+     */
+    public function updateSousCategorie(Request $request)
+    {
+        $id = $request->input('id'); // Get the 'id' from the form
 
-    
+        Log::info("Updating Sous Categorie ID: $id", $request->all());
 
-public function updateSousCategorie(Request $request)
-{
-    $id = $request->input('id'); // Get the 'id' from the form
+        // Find the SousCategorie by ID
+        $sousCategorie = SousCategorie::find($id);
 
-    Log::info("Updating Sous Categorie ID: $id", $request->all());
+        // Check if the sous-categorie exists
+        if (!$sousCategorie) {
+            return response()->json(['message' => 'Sous-categorie not found'], 404);
+        }
 
-    // Find the SousCategorie by ID
-    $sousCategorie = SousCategorie::find($id);
+        // Validate the incoming request, ensuring uniqueness of title (exclude the current category ID)
+        $validated = $request->validate([
+            'titre' => 'required|string|max:255|unique:sous_categories,titre,' . $id, // Ensure titre is unique
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image is optional during update
+            'categorie_id' => 'required|exists:categories,id', // Ensure the category ID is valid
+        ], [
+            'titre.unique' => 'This sous-categorie title already exists. Please choose another.',
+        ]);
 
-    // Check if the sous-categorie exists
-    if (!$sousCategorie) {
-        return response()->json(['message' => 'Sous-categorie not found'], 404);
+        // Handle the image upload if a new image is provided
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('uploads', 'public'); // Save in the 'storage/app/public/uploads' folder
+            $sousCategorie->image = $imagePath; // Update the image field
+        }
+
+        // Update the SousCategorie with validated data
+        $sousCategorie->update([
+            'titre' => $validated['titre'],
+            'image' => $sousCategorie->image ?? $sousCategorie->getOriginal('image'), // Keep old image if no new image is uploaded
+            'categorie_id' => $validated['categorie_id']
+        ]);
+
+        return response()->json(['message' => 'Sous-categorie updated successfully', 'sous_categorie' => $sousCategorie], 200);
     }
 
-    // Validate the incoming request
-    $validated = $request->validate([
-        'titre' => 'required|string|max:255',
-        'image' => 'required|string|max:255',
-        'categorie_id' => 'required|exists:categories,id', // Ensure the category ID is valid
-    ]);
-
-    // Update the SousCategorie with validated data
-    $sousCategorie->update($validated);
-
-    return response()->json(['message' => 'Sous-categorie updated successfully', 'sous_categorie' => $sousCategorie], 200);
-}
-
-
+    /**
+     * Delete a sous-categorie
+     */
     public function deleteSousCategorie(Request $request)
     {
         $id = $request->input('id'); // Get the 'id' from the form
@@ -103,13 +136,15 @@ public function updateSousCategorie(Request $request)
         return response()->json(['message' => 'Sous-categorie deleted successfully'], 200);
     }
 
+    /**
+     * Show form to add sous-categorie
+     */
     public function showAddSousCategorieForm()
-{
-    // Fetch all categories to populate the dropdown
-    $categories = Categorie::all();
+    {
+        // Fetch all categories to populate the dropdown
+        $categories = Categorie::all();
 
-    // Return the view with the categories data
-    return view('admin.SousCategorieAdmin', compact('categories'));
-}
-
+        // Return the view with the categories data
+        return view('admin.SousCategorieAdmin', compact('categories'));
+    }
 }

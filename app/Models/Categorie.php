@@ -10,6 +10,14 @@ class Categorie extends Model
 
     protected $fillable = ['titre', 'image'];
 
+    public static function rules()
+    {
+        return [
+            'titre' => 'required|string|unique:categories,titre',
+            'image' => 'required|string|max:50',
+        ];
+    }
+    
     public function sousCategories()
     {
         return $this->hasMany(SousCategorie::class);
