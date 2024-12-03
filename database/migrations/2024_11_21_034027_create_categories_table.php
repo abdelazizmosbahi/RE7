@@ -32,7 +32,7 @@ return new class extends Migration
             $table->id();
             // $table->text('titre');
             $table->text('titre')->unique(); // Add unique constraint here
-            $table->string('image', 50);
+            $table->string('image', 500);
             $table->timestamps();
         });        
     }

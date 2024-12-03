@@ -69,6 +69,7 @@ Route::get('/user/souscategorie', function () {
 
 Route::post('/admin/add-categorie', [CategorieController::class, 'addCategorie']);
 Route::delete('/admin/delete-categorie', [CategorieController::class, 'deleteCategorie']);
+// Route::post('/admin/delete-categorie', [CategorieController::class, 'deleteCategorie'])->name('delete.categorie');
 Route::put('/admin/update-categorie', [CategorieController::class, 'updateCategorie']);
 Route::get('/admin/get-all-categories', [CategorieController::class, 'getAllCategories']);
 Route::get('/admin/get-categorie-by-id', [CategorieController::class, 'getCategorieById']);

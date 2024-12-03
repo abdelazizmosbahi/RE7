@@ -14,7 +14,7 @@ class Categorie extends Model
     {
         return [
             'titre' => 'required|string|unique:categories,titre',
-            'image' => 'required|string|max:50',
+            'image' => 'required|string|max:500',
         ];
     }
     
