@@ -121,4 +121,23 @@ class CategorieController extends Controller
 
         return response()->json($categorie, 200);
     }
+
+
+    /**
+ * Fetch subcategories of a specific category by its ID.
+ */
+public function getSousCategoriesByCategoryId(Request $request)
+{
+    $categoryId = $request->input('category_id'); // Get the category ID from the request
+
+    // Fetch the category with its subcategories
+    $categorie = Categorie::with('sousCategories')->find($categoryId);
+
+    if (!$categorie) {
+        return response()->json(['message' => 'Category not found'], 404);
+    }
+
+    return response()->json(['category' => $categorie, 'souscategories' => $categorie->sousCategories], 200);
+}
+
 }

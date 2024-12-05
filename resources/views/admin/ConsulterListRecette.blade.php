@@ -1,4 +1,4 @@
-{{-- <!-- Add Navigation Buttons to Other Pages -->
+<!-- Add Navigation Buttons to Other Pages -->
 <div>
     <h1> admin - consulter list recette </h1>
     <a href="/welcome">Go to Welcome</a><br>
@@ -330,4 +330,4 @@ $('#confirm-delete-btn').click(function () {
     });
     </script>
 </body>
-</html> --}}
+</html>

@@ -73,6 +73,7 @@ Route::delete('/admin/delete-categorie', [CategorieController::class, 'deleteCat
 Route::put('/admin/update-categorie', [CategorieController::class, 'updateCategorie']);
 Route::get('/admin/get-all-categories', [CategorieController::class, 'getAllCategories']);
 Route::get('/admin/get-categorie-by-id', [CategorieController::class, 'getCategorieById']);
+Route::get('/categories/{category_id}/souscategories', [CategorieController::class, 'getSousCategoriesByCategoryId']);
 
 
 // sub categorie admin routes
