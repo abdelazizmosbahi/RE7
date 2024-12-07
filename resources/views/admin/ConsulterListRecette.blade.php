@@ -1,24 +1,6 @@
-<!-- Add Navigation Buttons to Other Pages -->
-<div>
-    <h1> admin - consulter list recette </h1>
-    <a href="/welcome">Go to Welcome</a><br>
-    <a href="/admin/categorie">Go to Admin - ajouter Categories</a><br>
-    <a href="/admin/consulter-list-recette">Go to Admin - View Recipe List</a><br>
-    <a href="/admin/consulter-recette">Go to Admin - View Recipe</a><br>
-    <a href="/admin/modifier-recette">Go to Admin - Edit Recipe</a><br>
-    <a href="/admin/souscategorie">Go to Admin - Subcategories</a><br>
-    <a href="/user/ajouter-recette">Go to User - Add Recipe</a><br>
-    <a href="/user/categorie">Go to User - Categories</a><br>
-    <a href="/user/consulter-list-recette">Go to User - View Recipe List</a><br>
-    <a href="/user/consulter-recette">Go to User - View Recipe</a><br>
-    <a href="/user/mes-recettes">Go to User - My Recipes</a><br>
-    <a href="/user/souscategorie">Go to User - Subcategories</a><br>
-    </div>
-
-
-    
 <!DOCTYPE html>
 <html lang="en">
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -28,306 +10,276 @@
     <link rel="stylesheet" href="{{ asset('assets/css/icons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/aos/aos.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.min.css') }}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
     <title>Admin - Manage Categories</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap CSS (Bootstrap 5) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JS (Bootstrap 5) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
+ 
 <body>
-    <div class="container my-5">
-        <h1 class="text-center mb-4">Manage Categories</h1>
-
-        <!-- Add Categorie -->
-        <div class="card mb-4">
-            <div class="card-header">Add Categorie</div>
-            <div class="card-body">
-                <form id="add-categorie-form" enctype="multipart/form-data">
-                    @csrf
-                    <div class="form-group">
-                        <label for="titre">Titre</label>
-                        <input type="text" id="titre" name="titre" class="form-control" placeholder="Enter Title" required>
+ 
+    <header id="page-topbar">
+        <div class="layout-width">
+            <div class="navbar-header">
+                <div class="d-flex">
+                    <div class="navbar-brand-box horizontal-logo"></div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown ms-sm-3 header-item topbar-user">
+                        <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown">
+                            <i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
+                            <span class="align-middle">Profil</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <span class="align-middle">Déconnexion</span>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="image">Image</label>
-                        <input type="file" id="image" name="image" class="form-control" accept="image/*" required>
+                </div>
+            </div>
+        </div>
+    </header>
+ 
+    <div class="app-menu navbar-menu">
+        <div class="navbar-brand-box">
+            <a href="/Home" class="logo logo-dark">
+                <span class="logo-lg">
+                    <img src="/assets/images/logor.png" alt="" height="75" />
+                </span>
+            </a>
+            <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
+                id="vertical-hover">
+                <i class="ri-record-circle-line"></i>
+            </button>
+        </div>
+        <div id="scrollbar">
+            <div class="container-fluid">
+                <ul class="navbar-nav" id="navbar-nav">
+                    <li class="menu-title"><span data-key="t-menu">Menu</span></li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link">
+                            <span data-key="t-dashboards">Dashboards</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link">
+                            <span data-key="t-dashboards">Utilisateurs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/CategorieAdmin" class="nav-link">
+                            <span data-key="t-dashboards">Gérer Catégorie</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/GestionRecette" class="nav-link">
+                            <span data-key="t-dashboards">Gérer Recette</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/MyReclamations" class="nav-link">
+                            <span data-key="t-dashboards">Avis</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/CategorieUser" class="nav-link">
+                            <span data-key="t-dashboards">Recette</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/MesRecetteCons" class="nav-link">
+                            <span data-key="t-dashboards">Mes Recette</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="sidebar-background"></div>
+    </div>
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Recette liste</h4>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-2">Add</button>
-                </form>
-                <div id="add-success-message" class="mt-3" style="display:none; color:green;">Category added successfully!</div>
-            </div>
-        </div>        
+                </div>
+               
 
-<!-- Get All Categories -->
-<div class="mb-4">
-    <button id="get-all-categories-btn" class="btn btn-info">Get All Categories</button>
-    <div id="all-categories-list" class="mt-3"></div>
-</div>
-<!-- Update Modal -->
-<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <form id="update-category-form">
-          @csrf
-          @method('PUT')
-          <div class="modal-header">
-            <h5 class="modal-title" id="updateModalLabel">Update Category</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <input type="hidden" id="update-id" name="id">
-            <div class="mb-3">
-              <label for="update-title" class="form-label">Title</label>
-              <input type="text" class="form-control" id="update-title" name="titre" required>
-            </div>
-            <div class="mb-3">
-              <label for="update-image" class="form-label">Image</label>
-              <input type="file" class="form-control" id="update-image" name="image" accept="image/*">
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Update</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Delete Modal -->
-  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="deleteModalLabel">Delete Category</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to delete this category?
-          <input type="hidden" id="delete-id">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-danger" id="confirm-delete-btn">Delete</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-<!-- Category Details Section -->
-<div id="get-category-result" class="mt-4">
-    <!-- Detailed information about a clicked category will be displayed here -->
-</div>
-
-
-
+ 
+ 
+                <div class="container">
+                    <h2 class="my-4">Manage Recettes</h2>
+            
+                    <!-- Add Recipe Form -->
+                    <h3>Add a New Recette</h3>
+                    <form action="/recettes" method="POST" enctype="multipart/form-data">
+                        <!-- Replace with appropriate CSRF token for security -->
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            
+                        <div class="form-group">
+                            <label for="titre">Title</label>
+                            <input type="text" name="titre" id="titre" class="form-control" required>
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="image">Image (optional)</label>
+                            <input type="file" name="image" id="image" class="form-control">
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="categorie_id">Category</label>
+                            <select name="categorie_id" id="categorie_id" class="form-control" required>
+                                <!-- Categories will be dynamically loaded here -->
+                            </select>
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="sous_categorie_id">Sous-Category</label>
+                            <select name="sous_categorie_id" id="sous_categorie_id" class="form-control" required>
+                                <!-- Sous-categories will be dynamically loaded here -->
+                            </select>
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="ingredients">Ingredients</label>
+                            <textarea name="ingredients" id="ingredients" class="form-control" rows="4" required></textarea>
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="methode_preparation">Preparation Method</label>
+                            <textarea name="methode_preparation" id="methode_preparation" class="form-control" rows="4" required></textarea>
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="informations_complementaire">Additional Information (optional)</label>
+                            <textarea name="informations_complementaire" id="informations_complementaire" class="form-control" rows="4"></textarea>
+                        </div>
+            <br>
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="acceptée">Accepted</option>
+                                <option value="en cours">In Progress</option>
+                                <option value="refusée">Rejected</option>
+                            </select>
+                        </div>
+            
+                        <button type="submit" class="btn btn-primary">Add Recette</button>
+                    </form>
+            
+                    <hr>
+            
+                    <!-- Display all recipes -->
+                    <h3>All Recettes</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Sous-Category</th>
+                                <th>Ingredients</th>
+                                <th>Preparation Method</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Loop through recettes -->
+                            <tr>
+                                <td>Recipe 1</td>
+                                <td>Category 1</td>
+                                <td>Sous-Category 1</td>
+                                <td>Ingredients for recipe 1</td>
+                                <td>Method for recipe 1</td>
+                                <td>Accepted</td>
+                                <td>
+                                    <a href="/recettes/1/edit" class="btn btn-warning">Edit</a>
+                                    <form action="/recettes/1" method="POST" style="display:inline;">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <!-- Repeat for other recipes -->
+                        </tbody>
+                    </table>
+                </div>
+ 
+ 
     <script>
-        // Handle Add Categorie
-$('#add-categorie-form').submit(function(e) {
-    e.preventDefault();
-    // Create FormData to handle file uploads
-    let formData = new FormData(this);
-
-    $.ajax({
-        url: '/admin/add-categorie',
-        method: 'POST',
-        data: formData,
-        processData: false, // Required for FormData
-        contentType: false, // Required for FormData
-        success: function(response) {
-            $('#add-success-message').show();
-            $('#add-categorie-form')[0].reset();
-        },
-        error: function(xhr, status, error) {
-            alert("Error: " + xhr.responseText);
+        // Function to load categories dynamically
+        function loadCategories() {
+            fetch('/admin/get-all-categories')
+                .then(response => response.json())
+                .then(data => {
+                    const categorySelect = document.getElementById('categorie_id');
+                    data.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category.id;
+                        option.textContent = category.titre;
+                        categorySelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Erreur lors du chargement des catégories:', error));
         }
-    });
-});
 
+// Function to load sous-categories dynamically based on selected category
+function loadSousCategories(categoryId) {
+    // Check if categoryId is valid
+    if (!categoryId) {
+        console.error("Invalid category ID:", categoryId);
+        return;
+    }
 
-
-        document.getElementById('get-all-categories-btn').addEventListener('click', function (event) {
-    event.preventDefault(); // Prevent the page from refreshing
-    fetch('/admin/get-all-categories')
-        .then(response => response.json())
-        .then(categories => {
-            const listDiv = document.getElementById('all-categories-list');
-            listDiv.innerHTML = ''; // Clear the previous list
-
-            if (categories.length > 0) {
-                const list = document.createElement('ul');
-                list.className = 'list-group';
-
-                categories.forEach(category => {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-
-                    // Add category title as clickable
-                    const title = document.createElement('span');
-                    title.textContent = category.titre;
-                    title.style.cursor = 'pointer';
-                    title.addEventListener('click', () => displayCategoryDetails(category));
-                    listItem.appendChild(title);
-
-                    // Add delete button
-                    const deleteButton = document.createElement('button');
-                    deleteButton.className = 'btn btn-danger btn-sm';
-                    deleteButton.textContent = 'Delete';
-                    deleteButton.addEventListener('click', () => showDeleteModal(category.id));
-                    listItem.appendChild(deleteButton);
-
-                    // Add update button
-                    const updateButton = document.createElement('button');
-                    updateButton.className = 'btn btn-warning btn-sm';
-                    updateButton.textContent = 'Update';
-                    updateButton.addEventListener('click', () => showUpdateModal(category));
-                    listItem.appendChild(updateButton);
-
-                    list.appendChild(listItem);
-                });
-
-                listDiv.appendChild(list);
-            } else {
-                listDiv.innerHTML = '<p>No categories found.</p>';
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching categories:', error);
-            document.getElementById('all-categories-list').innerHTML = '<p class="text-danger">Failed to load categories.</p>';
-        });
-});
-
-// Display category details
-function displayCategoryDetails(category) {
-    const detailsDiv = document.getElementById('get-category-result');
-    const imageUrl = `{{ asset('storage/') }}/${category.image}`;
-    detailsDiv.innerHTML = `
-        <p><strong>Title:</strong> ${category.titre}</p>
-        <p><strong>Image:</strong><br><img src="${imageUrl}" alt="${category.titre}" style="max-width: 150px;"></p>
-    `;
-}
-
-// Show Delete Modal
-function showDeleteModal(categoryId) {
-    const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-    document.getElementById('confirm-delete-btn').onclick = function () {
-        deleteCategory(categoryId);
-        deleteModal.hide();
-    };
-    deleteModal.show();
-}
-
-// Delete Category
-function deleteCategory(categoryId) {
-    fetch('/admin/delete-categorie', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        },
-        body: JSON.stringify({ id: categoryId }),
-    })
+    // Fetch sous-categories based on selected category ID
+    fetch(`/admin/get-all-sous-categories/${categoryId}`)
         .then(response => response.json())
         .then(data => {
-            if (data.message === 'Category deleted successfully') {
-                alert(data.message);
-                document.getElementById('get-all-categories-btn').click(); // Refresh the list
+            // Get the sous-categorie dropdown
+            const sousCategorieSelect = document.getElementById('sous_categorie_id');
+            sousCategorieSelect.innerHTML = ''; // Clear previous options
+
+            if (data.length === 0) {
+                // If no sous-categories are found, you can show a message or disable the dropdown
+                const option = document.createElement('option');
+                option.textContent = "No sous-categories available";
+                sousCategorieSelect.appendChild(option);
             } else {
-                alert(data.message);
+                // Populate the sous-categorie dropdown with the fetched data
+                data.forEach(sousCategory => {
+                    const option = document.createElement('option');
+                    option.value = sousCategory.id;
+                    option.textContent = sousCategory.titre;
+                    sousCategorieSelect.appendChild(option);
+                });
             }
         })
-        .catch(error => {
-            console.error('Error deleting category:', error);
-            alert('An error occurred while deleting the category.');
-        });
+        .catch(error => console.error('Error loading sous-categories:', error));
 }
 
-// Handle Update Modal
-function showUpdateModal(category) {
-    // Set the modal fields with the category data
-    $('#update-id').val(category.id);
-    $('#update-title').val(category.titre);
-    // Show the modal
-    $('#updateModal').modal('show');
-}
-
-// Handle Delete Modal
-function showDeleteModal(categoryId) {
-    // Set the category ID to delete
-    $('#delete-id').val(categoryId);
-    // Show the modal
-    $('#deleteModal').modal('show');
-}
-
-// Handle Update Form Submission
-$('#update-category-form').submit(function (e) {
-    e.preventDefault();
-
-    let formData = new FormData(this);
-
-    $.ajax({
-        url: '/admin/update-categorie',
-        method: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            alert('Category updated successfully!');
-            location.reload(); // Reload the page to reflect changes
-        },
-        error: function (xhr) {
-            alert('Error: ' + xhr.responseText);
-        }
-    });
+// Event listener for category change to load corresponding sous-categories
+document.getElementById('categorie_id').addEventListener('change', function () {
+    const categoryId = this.value;
+    if (categoryId) {
+        loadSousCategories(categoryId); // Load sous-categories when category changes
+    } else {
+        document.getElementById('sous_categorie_id').innerHTML = ''; // Clear sous-categories if no category selected
+    }
 });
 
-// Handle Delete Confirmation
-$('#confirm-delete-btn').click(function () {
-    let categoryId = $('#delete-id').val();
 
-    $.ajax({
-        url: '/admin/delete-categorie',
-        method: 'POST',
-        data: {
-            _method: 'DELETE', // Specify the method as DELETE
-            _token: $('meta[name="csrf-token"]').attr('content'), // Include CSRF token
-            id: categoryId
-        },
-        success: function (response) {
-            alert('Category deleted successfully!');
-            location.reload(); // Reload the page to reflect changes
-        },
-        error: function (xhr) {
-            alert('Error: ' + xhr.responseText);
-        }
-    });
-});
-
-        // Handle Get Categorie
-    $('#get-categorie-form').submit(function(e) {
-        e.preventDefault();
-        let formData = $(this).serialize();
-        $.ajax({
-            url: '/admin/get-categorie-by-id',  // Assuming this is the correct route
-            method: 'GET',
-            data: formData,
-            success: function(response) {
-                // Check if the response is successful
-                let category = response;
-                let imageUrl = "{{ asset('storage/') }}/" + category.image; // Build the image URL
-
-                // Display the category title and image
-                $('#get-category-result').html(`
-                    <p>Category: ${category.titre}</p>
-                    <p><img src="${imageUrl}" alt="Category Image" width="100" height="100"></p>
-                `);
-            },
-            error: function(xhr, status, error) {
-                alert("Error: " + xhr.responseText);
-            }
-        });
-    });
+        // Load categories when the page is ready
+        window.onload = loadCategories;
     </script>
 </body>
+ 
 </html>
+ 

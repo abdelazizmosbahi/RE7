@@ -15,6 +15,8 @@ class SousCategorie extends Model
     // Define the relationship with the Categorie model
     public function categorie()
     {
-        return $this->belongsTo(Categorie::class);
+        // return $this->belongsTo(Categorie::class);
+        return $this->belongsTo(Categorie::class, 'categorie_id'); // Replace 'categorie_id' with your actual foreign key
+
     }
 }

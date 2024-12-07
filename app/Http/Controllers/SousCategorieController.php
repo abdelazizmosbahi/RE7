@@ -48,17 +48,30 @@ class SousCategorieController extends Controller
         ], 201);
     }
 
-    /**
-     * Get all sous categories
-     */
-    public function getAllSousCategories()
-    {
-        // Retrieve all sous categories
-        $sousCategories = SousCategorie::all();
+    // /**
+    //  * Get all sous categories
+    //  */
+    // public function getAllSousCategories()
+    // {
+    //     // Retrieve all sous categories
+    //     $sousCategories = SousCategorie::all();
     
-        // Return the sous categories in a JSON format
-        return response()->json($sousCategories, 200);
-    }
+    //     // Return the sous categories in a JSON format
+    //     return response()->json($sousCategories, 200);
+    // }
+    public function getAllSousCategories() {
+    $sousCategories = SousCategorie::with('categorie')->get();  // Assuming you have a relationship defined
+
+    // Format the response to include category title
+    return response()->json($sousCategories->map(function ($sousCategorie) {
+        return [
+            'id' => $sousCategorie->id,
+            'titre' => $sousCategorie->titre,
+            'image' => $sousCategorie->image,
+            'categorie_title' => $sousCategorie->categorie->titre,  // Fetching the related category title
+        ];
+    }));
+}
 
     /**
      * Get a sous categorie by ID
@@ -147,4 +160,21 @@ class SousCategorieController extends Controller
         // Return the view with the categories data
         return view('admin.SousCategorieAdmin', compact('categories'));
     }
+
+    public function show($id)
+    {
+        // Fetch the sous-categorie by ID
+        $sousCategorie = SousCategorie::findOrFail($id);
+    
+        // Pass the sous-categorie data to the view
+        return view('admin.ConsulterSousCategorie', compact('sousCategorie'));
+    }
+
+    public function index()
+{
+    $sousCategories = SousCategorie::all(); // Fetch sous-categories from the database
+    return view('admin.SousCategorieAdmin', compact('sousCategories')); // Load the view with data
+}
+
+    
 }

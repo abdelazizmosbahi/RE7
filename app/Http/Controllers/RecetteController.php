@@ -133,6 +133,18 @@ public function updateRecipeStatus(Request $request, $id)
     ], 200);
 }
 
+// Fetch sous-categories based on category ID
+public function getSousCategoriesByCategoryId($categoryId)
+{
+    // Fetch all sous-categories related to the given category ID
+    $sousCategories = SousCategorie::where('categorie_id', $categoryId)->get();
+
+    if ($sousCategories->isEmpty()) {
+        return response()->json(['message' => 'No sous-categories found for this category'], 404);
+    }
+
+    return response()->json($sousCategories, 200);
+}
 
 
 

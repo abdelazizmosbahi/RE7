@@ -16268,8 +16268,15 @@ span.flatpickr-weekday {
 
 @media (min-width:992px) {
     .sticky-side-div {
-        position: sticky;
-        top: calc(70px + 1.5rem)
+        position: absolute;
+        top: 150px;
+        right: 20px;
+        z-index: 10;
+        width: 400px;
+        background:#F3F3F9;
+        border-radius: 8px;
+        padding: 15px;
+     
     }
 }
 

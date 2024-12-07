@@ -1,22 +1,4 @@
-<!-- Add Navigation Buttons to Other Pages -->
-<div>
-    <h1>sous categorie user</h1>
-    <a href="/welcome">Go to Welcome</a><br>
-    <a href="/admin/categorie">Go to Admin - ajouter Categories</a><br>
-    <a href="/admin/consulter-list-recette">Go to Admin - View Recipe List</a><br>
-    <a href="/admin/consulter-recette">Go to Admin - View Recipe</a><br>
-    <a href="/admin/modifier-recette">Go to Admin - Edit Recipe</a><br>
-    <a href="/admin/souscategorie">Go to Admin - Subcategories</a><br>
-    <a href="/user/ajouter-recette">Go to User - Add Recipe</a><br>
-    <a href="/user/categorie">Go to User - Categories</a><br>
-    <a href="/user/consulter-list-recette">Go to User - View Recipe List</a><br>
-    <a href="/user/consulter-recette">Go to User - View Recipe</a><br>
-    <a href="/user/mes-recettes">Go to User - My Recipes</a><br>
-    <a href="/user/souscategorie">Go to User - Subcategories</a><br>
-    </div>
-
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
  
 <head>
@@ -120,7 +102,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Catégorie details</h4>
+                            <h4 class="mb-sm-0">Sous Catégorie details</h4>
                         </div>
                     </div>
                 </div>
@@ -139,7 +121,39 @@
                        
     <div class="container">
         <div class="card">
-            
+            <div class="card-header">
+              
+                
+                <div class="container">
+                    <h1>Sous-Catégorie Details</h1>
+                
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>{{ $sousCategorie->titre }}</h3>
+                
+                            <!-- Display the associated category -->
+                            <p><strong>Category:</strong> {{ $sousCategorie->categorie ? $sousCategorie->categorie->titre : 'No category assigned' }}</p>
+                
+                            <!-- Display the image if available -->
+                            @if ($sousCategorie->image)
+                                <img src="{{ asset('storage/' . $sousCategorie->image) }}" alt="{{ $sousCategorie->titre }}" class="img-fluid" style="max-width: 200px;">
+                            @else
+                                <p>No image available.</p>
+                            @endif
+                
+                            {{-- <p><strong>Description:</strong> {{ $sousCategorie->description }}</p> --}}
+                
+                            <!-- Display the timestamps -->
+                            <p><strong>Created At:</strong> {{ $sousCategorie->created_at }}</p>
+                            <p><strong>Updated At:</strong> {{ $sousCategorie->updated_at }}</p>
+                        </div>
+                    </div>
+                
+                    <a href="{{ route('sous-categorie.index') }}" class="btn btn-primary mt-3">Back to List</a>
+                </div>
+                
+
+        </div>
     </div>
 
                         </div>

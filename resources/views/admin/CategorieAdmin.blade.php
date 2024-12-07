@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="en">
  
 <head>
@@ -11,9 +11,12 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/aos/aos.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.min.css') }}">
     <title>Admin - Manage Categories</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap CSS (Bootstrap 5) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JS (Bootstrap 5) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </head>
  
@@ -96,8 +99,6 @@
         </div>
         <div class="sidebar-background"></div>
     </div>
-
-    
     <div class="main-content">
         <div class="page-content">
             <div class="container-fluid">
@@ -110,19 +111,401 @@
                     </div>
                 </div>
                 <!-- end page title -->
-                                    <!-- Liste des catégories -->
-                                    <div id="all-categories-list" class="col-xl-8">
-                                    </div>
-{{-- 
-                                    <div id="categories-list">
-                                        <!-- Categories will be listed here -->
-                                    </div> --}}
-                                    
-                                    <div id="category-details">
-                                        <!-- Selected category and subcategories will be displayed here -->
-                                    </div>
-                                    
+                <div id="all-categories-list" class="row mb-3"></div>
+                <!--  récupérer tous les catégories -->
 
+                <!-- Update Category Modal -->
+<div class="modal fade" id="updateCategoryModal" tabindex="-1" aria-labelledby="updateCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateCategoryModalLabel">Modifier Catégorie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="update-category-form" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" id="category-id" name="category_id">
+                    <div class="mb-3">
+                        <label for="update-titre" class="form-label">Titre</label>
+                        <input type="text" id="update-titre" name="titre" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="update-image" class="form-label">Image</label>
+                        <input type="file" id="update-image" name="image" class="form-control" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Category Modal -->
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCategoryModalLabel">Supprimer Catégorie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer cette catégorie?</p>
+                <form id="delete-category-form">
+                    @csrf
+                    <input type="hidden" id="delete-category-id" name="category_id">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+                // Lors du chargement de la page, récupérer les catégories depuis l'API
+    window.addEventListener('DOMContentLoaded', () => {
+        fetch('/admin/get-all-categories')
+            .then(response => response.json())
+            .then(data => {
+                const categoriesList = document.getElementById('all-categories-list');
+                categoriesList.innerHTML = ''; // Effacer les anciennes catégories
+
+                data.forEach(category => {
+                    const categoryName = category.titre || "Nom non disponible";
+                    const categoryImage = category.image || "assets/images/default-category.jpg"; // Default image if missing
+                    const categoryCard = `
+                        <div class="col-xl-8">
+                            <div class="card product">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h5 class="fs-15 text">
+                                                <a class="text-dark">
+                                                    ${categoryName}
+                                                </a>
+                                            </h5>
+                                            <div class="avatar-lg bg-light rounded p-1">
+                                                <img src="{{ asset('storage/') }}/${categoryImage}" alt="${categoryName}" class="img-fluid d-block" style="width: 180px; height: 100px;" />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <!-- Inside the forEach loop in the category rendering code -->
+                                            <button type="button" class="btn btn-outline-dark" style="margin-right: 8px;" data-bs-toggle="modal" data-bs-target="#updateCategoryModal" onclick="fillUpdateModal(${category.id}, '${category.titre}', '${category.image}')">Modifier</button>
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" onclick="fillDeleteModal(${category.id})">Supprimer</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    categoriesList.innerHTML += categoryCard;
+                });
+            })
+            .catch(error => console.error('Erreur lors de la récupération des catégories:', error));
+    });
+</script>
+ 
+ 
+                <div class="col-xl-4">
+                    <div class="sticky-side-div">
+                        <div class="card">
+                            <div class="card-header border-bottom-dashed">
+                                <h5 class="card-title mb-0">Ajouter une catégorie</h5>
+                            </div>
+                            <form id="add-categorie-form" enctype="multipart/form-data">
+                                @csrf
+                                <div class="card-body pt-2">
+ 
+                                    <div><label for="titre" class="text-muted text-uppercase fw-semibold">Titre</label>
+                                    </div>
+                                    <input type="text" id="titre" name="titre" class="form-control"
+                                        placeholder="Entrer titre" required>
+                                </div>
+                                <div class="card-body pt-2">
+                                    <div> <label for="imageRecette" class="text-muted text-uppercase fw-semibold">
+                                            Image
+                                            de catégorie </label> </div>
+                                    <div class="dropzone">
+                                        <div class="fallback"> <input type="file" id="image" name="image"
+                                                class="form-control" accept="image/*" required> </div>
+                                        <div style="text-align: center;"> <i
+                                                class="display-6 text-muted ri-upload-cloud-2-fill"></i>
+                                            <h6>Entrer l'image de la catégorie</h6>
+                                        </div>
+                                    </div> <button type="submit" class="btn btn-warning"
+                                        style="float: right; margin-top: 10px;">Ajouter</button>
+                            </form><br>
+                            <div id="add-success-message" class="mt-3" style="display:none; color:green;">Catégorie
+                                ajoutée avec succès !</div>
+                        </div>
+                    </div>
+                </div>
+ 
+            </div>
+        </div>
+    </div>
+ 
+ 
+    <script>
+    // Handle Add Categorie
+    $('#add-categorie-form').submit(function(e) {
+        e.preventDefault();
+        // Create FormData to handle file uploads
+        let formData = new FormData(this);
+ 
+        $.ajax({
+            url: '/admin/add-categorie',
+            method: 'POST',
+            data: formData,
+            processData: false, // Required for FormData
+            contentType: false, // Required for FormData
+            success: function(response) {
+                $('#add-success-message').show();
+                $('#add-categorie-form')[0].reset();
+            },
+            error: function(xhr, status, error) {
+                alert("Error: " + xhr.responseText);
+            }
+        });
+    });
+ 
+// Charger les catégories
+function loadCategories() {
+    fetch('/admin/get-all-categories')
+        .then(response => response.json())
+        .then(data => {
+            const categoriesList = document.getElementById('all-categories-list');
+            categoriesList.innerHTML = ''; // Effacer les anciennes catégories
+
+            data.forEach(category => {
+                // Make sure to use the correct URL for the image from the database
+                const categoryImage = category.image || '/assets/images/default-category.jpg'; // Fallback image if not available
+
+                const categoryCard = `
+                    <div class="col-xl-8">
+                        <div class="card product">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <h5 class="fs-15 text">
+                                            <a class="text-dark">
+                                                ${category.titre}
+                                            </a>
+                                        </h5>
+                                        <div class="avatar-lg bg-light rounded p-1">
+                                            <img src="{{ asset('storage/') }}/${categoryImage}" alt="${category.titre}" class="img-fluid d-block" style="width: 180px; height: 100px;" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-outline-dark" style="margin-right: 8px;" data-bs-toggle="modal" data-bs-target="#updateCategoryModal" onclick="fillUpdateModal(${category.id}, '${category.titre}', '${category.image}')">Modifier</button>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" onclick="fillDeleteModal(${category.id})">Supprimer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                categoriesList.innerHTML += categoryCard;
+            });
+        })
+        .catch(error => console.error('Erreur lors de la récupération des catégories:', error));
+}
+
+
+// Ensure CSRF token is included in all AJAX requests
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+// Fill the update modal with category data
+function fillUpdateModal(categoryId, categoryTitle, categoryImage) {
+    $('#category-id').val(categoryId);
+    $('#update-titre').val(categoryTitle);
+    // Handle category image for update
+    $('#update-image').val(categoryImage);
+}
+
+// Handle Update Category
+$('#update-category-form').submit(function(e) {
+    e.preventDefault();
+    let formData = new FormData(this);
+
+    $.ajax({
+        url: '/admin/update-categorie',
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $('#updateCategoryModal').modal('hide');
+            loadCategories(); // Reload categories list
+            alert('Catégorie mise à jour avec succès!');
+        },
+        error: function(xhr, status, error) {
+            alert("Error: " + xhr.responseText);
+        }
+    });
+});
+
+// Fill the delete modal with category ID
+function fillDeleteModal(categoryId) {
+    $('#delete-category-id').val(categoryId);
+}
+
+// Handle Delete Category
+$('#delete-category-form').submit(function(e) {
+    e.preventDefault();
+    let categoryId = $('#delete-category-id').val();
+
+    $.ajax({
+        url: '/admin/delete-categorie',
+        method: 'POST',
+        data: {
+            category_id: categoryId
+        },
+        success: function(response) {
+            $('#deleteCategoryModal').modal('hide');
+            loadCategories(); // Reload categories list
+            alert('Catégorie supprimée avec succès!');
+        },
+        error: function(xhr, status, error) {
+            alert("Error: " + xhr.responseText);
+        }
+    });
+});
+
+// // Charger les catégories lors du chargement de la page
+// window.addEventListener('DOMContentLoaded', () => {
+//     loadCategories();
+// });
+
+
+
+   
+    </script>
+</body>
+ 
+</html>
+  --}}
+
+
+  
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/icons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/aos/aos.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.min.css') }}">
+    <title>Admin - Manage Categories</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+</head>
+ 
+<body>
+    <header id="page-topbar">
+        <div class="layout-width">
+            <div class="navbar-header">
+                <div class="d-flex">
+                    <div class="navbar-brand-box horizontal-logo"></div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown ms-sm-3 header-item topbar-user">
+                        <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown">
+                            <i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
+                            <span class="align-middle">Profil</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <span class="align-middle">Déconnexion</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+ 
+    <div class="app-menu navbar-menu">
+        <div class="navbar-brand-box">
+            <a href="/Home" class="logo logo-dark">
+                <span class="logo-lg">
+                    <img src="/assets/images/logor.png" alt="" height="75" />
+                </span>
+            </a>
+            <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
+                id="vertical-hover">
+                <i class="ri-record-circle-line"></i>
+            </button>
+        </div>
+        <div id="scrollbar">
+            <div class="container-fluid">
+                <ul class="navbar-nav" id="navbar-nav">
+                    <li class="menu-title"><span data-key="t-menu">Menu</span></li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link">
+                            <span data-key="t-dashboards">Dashboards</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link">
+                            <span data-key="t-dashboards">Utilisateurs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/CategorieAdmin" class="nav-link">
+                            <span data-key="t-dashboards">Gérer Catégorie</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/GestionRecette" class="nav-link">
+                            <span data-key="t-dashboards">Gérer Recette</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/MyReclamations" class="nav-link">
+                            <span data-key="t-dashboards">Avis</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/CategorieUser" class="nav-link">
+                            <span data-key="t-dashboards">Recette</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/MesRecetteCons" class="nav-link">
+                            <span data-key="t-dashboards">Mes Recette</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="sidebar-background"></div>
+    </div>
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Catégorie</h4>
+                        </div>
+                    </div>
+                </div>
+<!-- Liste des catégories -->
+<div id="all-categories-list" class="col-xl-8"></div>
+<div id="category-details"></div>
+                                    
 
 <!-- Update Modal -->
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
@@ -154,8 +537,6 @@
       </div>
     </div>
   </div>
-  
-  
 <!-- Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
@@ -181,8 +562,6 @@
 <div id="get-category-result" class="mt-4">
     <!-- Detailed information about a clicked category will be displayed here -->
 </div>
-
-
                  <div class="col-xl-4">
                     <div class="sticky-side-div">
                         <div class="card">
@@ -239,12 +618,80 @@
                     }
                 });
             });
-            
-            
-            
             document.addEventListener('DOMContentLoaded', function () {
     fetchCategories(); // Fetch categories on page load
 });
+// function fetchCategories() {
+//     fetch('/admin/get-all-categories')
+//         .then(response => response.json())
+//         .then(categories => {
+//             const listDiv = document.getElementById('all-categories-list');
+//             listDiv.innerHTML = ''; // Clear the previous list
+
+//             if (categories.length > 0) {
+//                 const list = document.createElement('ul');
+//                 list.className = 'list-group';
+
+//                 categories.forEach(category => {
+//                     const listItem = document.createElement('li');
+//                     listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+//                     // Add category title and image as clickable
+//                     const titleDiv = document.createElement('div');
+//                     titleDiv.className = 'd-flex align-items-center';
+
+//                     // Add category title and image as clickable
+// const title = document.createElement('span');
+// title.textContent = category.titre;
+// title.style.cursor = 'pointer';
+
+// // Link to the category details page
+// title.addEventListener('click', () => {
+//     window.location.href = '{{ route("categorie.show", ":id") }}'.replace(':id', category.id);
+// });
+
+
+//                     const image = document.createElement('img');
+//                     image.src = `{{ asset('storage/') }}/${category.image}`;
+//                     image.alt = category.titre;
+//                     image.style.width = '100px';
+//                     image.style.height = '100px';
+//                     // image.classList.add('ms-2');
+                    
+                    
+                    
+//                     titleDiv.appendChild(image);
+//                     titleDiv.appendChild(title);
+//                     listItem.appendChild(titleDiv);
+
+//                     // Add delete button
+//                     const deleteButton = document.createElement('button');
+//                     deleteButton.className = 'btn btn-danger btn-sm';
+//                     deleteButton.textContent = 'Delete';
+//                     deleteButton.addEventListener('click', () => showDeleteModal(category.id));
+//                     listItem.appendChild(deleteButton);
+
+//                     // Add update button
+//                     const updateButton = document.createElement('button');
+//                     updateButton.className = 'btn btn-warning btn-sm';
+//                     updateButton.textContent = 'Update';
+//                     updateButton.addEventListener('click', () => showUpdateModal(category));
+//                     listItem.appendChild(updateButton);
+
+//                     list.appendChild(listItem);
+//                 });
+
+//                 listDiv.appendChild(list);
+//             } else {
+//                 listDiv.innerHTML = '<p>No categories found.</p>';
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error fetching categories:', error);
+//             document.getElementById('all-categories-list').innerHTML = '<p class="text-danger">Failed to load categories.</p>';
+//         });
+// }
+
 
 function fetchCategories() {
     fetch('/admin/get-all-categories')
@@ -259,27 +706,40 @@ function fetchCategories() {
 
                 categories.forEach(category => {
                     const listItem = document.createElement('li');
-                    listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    listItem.className = 'list-group-item d-flex justify-content-start align-items-center';
 
-                    // Add category title and image as clickable
+                    // Flex container for image and titles (category title)
                     const titleDiv = document.createElement('div');
-                    titleDiv.className = 'd-flex align-items-center';
+                    titleDiv.className = 'd-flex flex-column ms-3'; // Use flex column to stack titles vertically
 
-                    const title = document.createElement('span');
-                    title.textContent = category.titre;
-                    title.style.cursor = 'pointer';
-                    title.addEventListener('click', () => displayCategoryDetails(category, listItem));
-
+                    // Image of the category
                     const image = document.createElement('img');
-                    image.src = `{{ asset('storage/') }}/${category.image}`;
+                    image.src = `{{ asset('storage/') }}/${category.image}`; // Image URL for category
                     image.alt = category.titre;
-                    image.style.width = '30px';
-                    image.style.height = '30px';
-                    image.classList.add('ms-2');
-                    
-                    titleDiv.appendChild(image);
+                    image.style.width = '100px';
+                    image.style.height = '100px';
+
+                    // Title of the category
+                    const title = document.createElement('span');
+                    title.textContent = category.titre; // Title of category
+                    title.style.cursor = 'pointer';
+                    title.classList.add('mt-2'); // Add margin to the top of category title
+                    title.addEventListener('click', () => {
+                        // Redirect to the category details page with the correct URL format
+                        window.location.href = `/admin/categorie/${category.id}`;
+                    });
+
+                    // Append image and title to the titleDiv
                     titleDiv.appendChild(title);
+
+                    // Add spacing between titles and buttons
+                    const spacingDiv = document.createElement('div');
+                    spacingDiv.style.marginLeft = '240px'; // You can adjust this value
+
+                    // Append image, titleDiv, and spacingDiv to the list item
+                    listItem.appendChild(image);
                     listItem.appendChild(titleDiv);
+                    listItem.appendChild(spacingDiv);
 
                     // Add delete button
                     const deleteButton = document.createElement('button');
@@ -290,14 +750,16 @@ function fetchCategories() {
 
                     // Add update button
                     const updateButton = document.createElement('button');
-                    updateButton.className = 'btn btn-warning btn-sm';
+                    updateButton.className = 'btn btn-warning btn-sm ms-2'; // Add margin to the left of the update button
                     updateButton.textContent = 'Update';
                     updateButton.addEventListener('click', () => showUpdateModal(category));
                     listItem.appendChild(updateButton);
 
+                    // Append the list item to the list
                     list.appendChild(listItem);
                 });
 
+                // Append the list to the main container
                 listDiv.appendChild(list);
             } else {
                 listDiv.innerHTML = '<p>No categories found.</p>';
@@ -308,6 +770,7 @@ function fetchCategories() {
             document.getElementById('all-categories-list').innerHTML = '<p class="text-danger">Failed to load categories.</p>';
         });
 }
+
 
 function displayCategoryDetails(category) {
     const detailsContainer = document.getElementById('get-category-result');
@@ -349,7 +812,6 @@ function displayCategoryDetails(category) {
         detailsContainer.setAttribute('data-category-id', category.id);  // Store the category ID to track which category’s details are shown
     }
 }
-
 // Add click event listener to the categories
 $(document).on('click', '.category-button', function() {
     var categoryId = $(this).closest('.category-item').data('id'); // Get the category ID from the clicked item
@@ -372,9 +834,6 @@ $(document).on('click', '.category-button', function() {
         }
     });
 });
-
-
-
 // Add click event listener to the categories
 $(document).on('click', '.category-button', function() {
     var categoryId = $(this).closest('.category-item').data('id'); // Get the category ID from the clicked item
@@ -386,7 +845,6 @@ $(document).on('click', '.category-button', function() {
         detailsDiv.remove();
         return;  // Exit early, no need to make the AJAX call
     }
-
     // Fetch details from the server if not already displayed
     $.ajax({
         url: '/path/to/your/getSousCategoriesByCategoryId', // Replace with your actual route
@@ -405,10 +863,6 @@ $(document).on('click', '.category-button', function() {
         }
     });
 });
-
-
-
-            
             // Show Delete Modal
             function showDeleteModal(categoryId) {
                 const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
@@ -418,7 +872,6 @@ $(document).on('click', '.category-button', function() {
                 };
                 deleteModal.show();
             }
-            
             // Delete Category
             function deleteCategory(categoryId) {
                 fetch('/admin/delete-categorie', {
@@ -443,46 +896,14 @@ $(document).on('click', '.category-button', function() {
                         alert('An error occurred while deleting the category.');
                     });
             }
-            
-            // Handle Update Modal
-            function showUpdateModal(category) {
-                // Set the modal fields with the category data
-                $('#update-id').val(category.id);
-                $('#update-title').val(category.titre);
-                // Show the modal
-                $('#updateModal').modal('show');
-            }
-            
             // Handle Delete Modal
             function showDeleteModal(categoryId) {
                 // Set the category ID to delete
                 $('#delete-id').val(categoryId);
                 // Show the modal
                 $('#deleteModal').modal('show');
-            }
-            
-            // Handle Update Form Submission
-            $('#update-category-form').submit(function (e) {
-                e.preventDefault();
-            
-                let formData = new FormData(this);
-            
-                $.ajax({
-                    url: '/admin/update-categorie',
-                    method: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        alert('Category updated successfully!');
-                        location.reload(); // Reload the page to reflect changes
-                    },
-                    error: function (xhr) {
-                        alert('Error: ' + xhr.responseText);
-                    }
-                });
-            });
-            
+            }            
+
             // Handle Delete Confirmation
             $('#confirm-delete-btn').click(function () {
                 let categoryId = $('#delete-id').val();
@@ -504,8 +925,35 @@ $(document).on('click', '.category-button', function() {
                     }
                 });
             });
-            
-                    // Handle Get Categorie
+            // Handle Update Modal
+            function showUpdateModal(category) {
+                // Set the modal fields with the category data
+                $('#update-id').val(category.id);
+                $('#update-title').val(category.titre);
+                // Show the modal
+                $('#updateModal').modal('show');
+            }
+
+            // Handle Update Form Submission
+            $('#update-category-form').submit(function (e) {
+                e.preventDefault();
+                let formData = new FormData(this);
+                $.ajax({
+                    url: '/admin/update-categorie',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        alert('Category updated successfully!');
+                        location.reload(); // Reload the page to reflect changes
+                    },
+                    error: function (xhr) {
+                        alert('Error: ' + xhr.responseText);
+                    }
+                });
+            });
+            // Handle Get Categorie
                 $('#get-categorie-form').submit(function(e) {
                     e.preventDefault();
                     let formData = $(this).serialize();
@@ -531,5 +979,4 @@ $(document).on('click', '.category-button', function() {
                 });
                 </script>
 </body>
- 
 </html>
