@@ -1,27 +1,4 @@
-<!-- Add Navigation Buttons to Other Pages -->
-<div>
-    <h1>user ajouter recette</h1>
-    <a href="/welcome">Go to Welcome</a><br>
-    <a href="/admin/categorie">Go to Admin - ajouter Categories</a><br>
-    <a href="/admin/consulter-list-recette">Go to Admin - View Recipe List</a><br>
-    <a href="/admin/consulter-recette">Go to Admin - View Recipe</a><br>
-    <a href="/admin/modifier-recette">Go to Admin - Edit Recipe</a><br>
-    <a href="/admin/souscategorie">Go to Admin - Subcategories</a><br>
-    <a href="/user/ajouter-recette">Go to User - Add Recipe</a><br>
-    <a href="/user/categorie">Go to User - Categories</a><br>
-    <a href="/user/consulter-list-recette">Go to User - View Recipe List</a><br>
-    <a href="/user/consulter-recette">Go to User - View Recipe</a><br>
-    <a href="/user/mes-recettes">Go to User - My Recipes</a><br>
-    <a href="/user/souscategorie">Go to User - Subcategories</a><br>
-    </div>
-
-
-
-
-    
-    <!DOCTYPE html>
-<html lang="en">
- 
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -116,37 +93,175 @@
         </div>
         <div class="sidebar-background"></div>
     </div>
+    
     <div class="main-content">
         <div class="page-content">
             <div class="container-fluid">
-                <!-- start page title -->
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Catégorie details</h4>
+                            <h4 class="mb-sm-0">Ajouter une Recette</h4>
                         </div>
                     </div>
                 </div>
-<!-- Liste des catégories -->
-<div id="all-categories-list" class="col-xl-8"></div>
-<div id="category-details"></div>
-                                    
 
-  
-<!-- Category Details Section -->
-<div id="get-category-result" class="mt-4">
-    <!-- Detailed information about a clicked category will be displayed here -->
-</div>
-                 <div class="col-xl-4">
-                    <div>
-                       
-    <div class="container">
-        <div class="card">
-            
+                <!-- Form for adding a recipe -->
+                <form id="addRecetteForm" action="{{ route('recette.add') }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="categorie_id">Catégorie</label>
+                        <select id="categorie_id" class="form-control" name="categorie_id" required>
+                            <option value="">Sélectionner une catégorie</option>
+                            <!-- Categories will be dynamically loaded here -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sous_categorie_id">Sous-Catégorie</label>
+                        <select id="sous_categorie_id" class="form-control" name="sous_categorie_id" disabled required>
+                            <option value="">Sélectionner une sous-catégorie</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="titre">Titre</label>
+                        <input type="text" id="titre" class="form-control" name="titre" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ingredients">Ingrédients</label>
+                        <input id="ingredients" class="form-control" name="ingredients" required></input>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="methode_preparation">Méthode de préparation</label>
+                        <input id="methode_preparation" class="form-control" name="methode_preparation" required></input>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="update-image" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="update-image" name="image" accept="image/*">
+                      </div>
+
+                    <div class="form-group">
+                        <label for="informations_complementaire">Informations complémentaires</label>
+                        <input id="informations_complementaire" class="form-control" name="informations_complementaire"></input>
+                    </div>
+<br>
+                    <button type="submit" class="btn btn-primary">Ajouter la Recette</button>
+                </form>
+                <br><div id="add-success-message" class="mt-3" style="display:none; color:green;">
+                    Recette added successfully!
+                </div>
+                
+
+            </div>
+        </div>
     </div>
 
-                        </div>
-                    </div>
-                </div>
+                
+  
+
+                
 </body>
+<script>
+    document.getElementById('addRecetteForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch('{{ route("recette.add") }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            // If the response isn't OK, throw an error
+            throw new Error('Network response was not OK');
+        }
+        // Try to parse JSON
+        return response.json();
+    })
+    .then(data => {
+        // Show the success message
+        const successMessage = document.getElementById('add-success-message');
+        successMessage.style.display = 'block';
+    //     document.getElementById('addRecetteForm').reset();
+    // })
+    // Wait a moment to let the user see the success message
+    setTimeout(() => {
+            location.reload(); // Refresh the page
+        }, 2000); // Adjust delay (2 seconds here) as needed
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding the recette. Please try again.');
+    });
+});
+
+
+    // Load categories and sous-categories when the page loads
+    window.addEventListener('DOMContentLoaded', () => {
+        loadCategories();
+    });
+
+    // Function to load categories dynamically into the dropdown
+    function loadCategories() {
+        fetch('/admin/get-all-categories')
+            .then(response => response.json())
+            .then(data => {
+                const categorySelect = document.getElementById('categorie_id');
+                data.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.titre;
+                    categorySelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Erreur lors du chargement des catégories:', error));
+    }
+
+    // Function to load sous-categories dynamically based on selected category
+    function loadSousCategories(categoryId) {
+        const sousCategorieSelect = document.getElementById('sous_categorie_id');
+        sousCategorieSelect.innerHTML = '';  // Clear previous options
+        sousCategorieSelect.disabled = true;  // Disable the dropdown initially
+
+        if (categoryId === "") {
+            return;  // No category selected, don't fetch sous-categories
+        }
+
+        fetch(`/user/get-sous-categories-by-category/${categoryId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    sousCategorieSelect.disabled = false;  // Enable the dropdown
+                    data.forEach(sousCategorie => {
+                        const option = document.createElement('option');
+                        option.value = sousCategorie.id;
+                        option.textContent = sousCategorie.titre;
+                        sousCategorieSelect.appendChild(option);
+                    });
+                } else {
+                    // No sous-categories, leave it empty and disabled
+                    sousCategorieSelect.disabled = true;  // Ensure the dropdown is disabled
+                }
+            })
+            .catch(error => console.error('Erreur lors du chargement des sous-catégories:', error));
+    }
+
+    // Event listener to update sous-categories when a category is selected
+    document.getElementById('categorie_id').addEventListener('change', (e) => {
+        loadSousCategories(e.target.value);
+    });
+
+
+    
+
+    
+</script>
+
 </html>

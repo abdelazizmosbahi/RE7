@@ -1,24 +1,4 @@
-<!-- Add Navigation Buttons to Other Pages -->
-<div>
-    <h1>User - Consulter recette user</h1>
-    <a href="/welcome">Go to Welcome</a><br>
-    <a href="/admin/categorie">Go to Admin - ajouter Categories</a><br>
-    <a href="/admin/consulter-list-recette">Go to Admin - View Recipe List</a><br>
-    <a href="/admin/consulter-recette">Go to Admin - View Recipe</a><br>
-    <a href="/admin/modifier-recette">Go to Admin - Edit Recipe</a><br>
-    <a href="/admin/souscategorie">Go to Admin - Subcategories</a><br>
-    <a href="/user/ajouter-recette">Go to User - Add Recipe</a><br>
-    <a href="/user/categorie">Go to User - Categories</a><br>
-    <a href="/user/consulter-list-recette">Go to User - View Recipe List</a><br>
-    <a href="/user/consulter-recette">Go to User - View Recipe</a><br>
-    <a href="/user/mes-recettes">Go to User - My Recipes</a><br>
-    <a href="/user/souscategorie">Go to User - Subcategories</a><br>
-    </div>
-
-
-    
-    <!DOCTYPE html>
-<html lang="en">
+<html>
  
 <head>
     <meta charset="UTF-8">
@@ -121,30 +101,29 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Catégorie details</h4>
+                            <h4 class="mb-sm-0">recette details</h4>
                         </div>
                     </div>
+
+                    <div class="container">
+                        <h2>{{ $recette->titre }}</h2>
+                        <p><strong>Ingrédients:</strong> {{ $recette->ingredients }}</p>
+                        <p><strong>Status:</strong> {{ $recette->status }}</p>
+                        <p><strong>Method of Preparation:</strong> {{ $recette->methode_preparation }}</p>
+                        <p><strong>Additional Info:</strong> {{ $recette->informations_complementaire }}</p>
+                        <p><strong>Created At:</strong> {{ $recette->created_at }}</p>
+                        <p><strong>Updated At:</strong> {{ $recette->updated_at }}</p>
+                        <a href="/user/consulter-list-recette" class="btn btn-primary">Back to List</a>
+                    </div>
+
                 </div>
-<!-- Liste des catégories -->
-<div id="all-categories-list" class="col-xl-8"></div>
-<div id="category-details"></div>
+            </div>
+        </div>
+    </div>
                                     
 
   
-<!-- Category Details Section -->
-<div id="get-category-result" class="mt-4">
-    <!-- Detailed information about a clicked category will be displayed here -->
-</div>
-                 <div class="col-xl-4">
-                    <div>
-                       
-    <div class="container">
-        <div class="card">
-            
-    </div>
 
-                        </div>
-                    </div>
-                </div>
+
 </body>
 </html>

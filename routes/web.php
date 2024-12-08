@@ -40,12 +40,15 @@ Route::get('/admin/souscategorie', function () {
 
 
 // User Routes
+// Route::get('/user/ajouter-recette', function () {
+//     return view('user.AjouterRecette');
+// });
+// User Routes for Recette
 Route::get('/user/ajouter-recette', function () {
     return view('user.AjouterRecette');
 });
-
-Route::get('/user/categorie', function () {
-    return view('user.CategorieUser');
+Route::get('/user/modifier-recette', function () {
+    return view('user.ModifierRecette');
 });
 
 Route::get('/user/consulter-list-recette', function () {
@@ -65,12 +68,15 @@ Route::get('/user/souscategorie', function () {
 });
 
 
+Route::get('/user/categorie', function () {
+    return view('user.CategorieUser');
+});
+
 
 // Admin API Routes for Categories
 
 Route::post('/admin/add-categorie', [CategorieController::class, 'addCategorie']);
 Route::delete('/admin/delete-categorie', [CategorieController::class, 'deleteCategorie']);
-// Route::post('/admin/delete-categorie', [CategorieController::class, 'deleteCategorie'])->name('delete.categorie');
 Route::put('/admin/update-categorie', [CategorieController::class, 'updateCategorie']);
 Route::get('/admin/get-all-categories', [CategorieController::class, 'getAllCategories']);
 Route::get('/admin/get-categorie-by-id', [CategorieController::class, 'getCategorieById']);
@@ -89,11 +95,12 @@ Route::get('/admin/get-sous-categorie-by-id/{id}', [SousCategorieController::cla
 Route::get('/admin/add-sous-categorie', [SousCategorieController::class, 'showAddSousCategorieForm']);
 Route::get('/admin/get-sous-categories/{categoryId}', [RecetteController::class, 'getSousCategoriesByCategoryId']);
 Route::get('/admin/souscategorie', [SousCategorieController::class, 'index'])->name('sous-categorie.index');
-// For showing a specific sous-categorie by its ID
 Route::get('/admin/souscategorie/{id}', [SousCategorieController::class, 'show'])->name('souscategorie.show');
 
 
-Route::post('/admin/addRecette', [RecetteController::class, 'addRecette']);
+// Route::post('/recettes', [RecetteController::class, 'addRecette'])->name('recette.store');
+
+// Route::post('/user/addRecette', [RecetteController::class, 'addRecette'])->name('recette.add');
 Route::delete('/admin/deleteRecette/{id}', [RecetteController::class, 'deleteRecette']);
 Route::put('/admin/updateRecette/{id}', [RecetteController::class, 'updateRecette']);
 Route::get('/admin/getAllRecettes', [RecetteController::class, 'getAllRecettes']);
@@ -103,3 +110,23 @@ Route::get('/admin/recipesRefusée/{id}', [RecetteController::class, 'getRefuser
 Route::get('/admin/recipesEnCours/{id}', [RecetteController::class, 'getEnCoursRecipes']);
 Route::put('/admin/recipes/{id}/{status}', [RecetteController::class, 'updateRecipeStatus']);
 
+
+Route::post('/recette/update-status/{id}', [RecetteController::class, 'updateRecipeStatus'])->name('recette.update.status');
+
+
+//// user
+
+// Route::post('/user/addRecette', [RecetteController::class, 'addRecette'])->name('recette.add');
+Route::post('/user/ajouter-recette', [RecetteController::class, 'addRecette'])->name('recette.add');
+Route::get('/user/recettes', [RecetteController::class, 'getAllRecettes'])->name('recettes.list');
+Route::get('/recette/delete/{id}', [RecetteController::class, 'deleteRecette'])->name('recette.delete');
+Route::get('/recette/edit/{id}', [RecetteController::class, 'showEditForm'])->name('recette.edit');
+Route::post('/recette/update/{id}', [RecetteController::class, 'updateRecette'])->name('recette.update');
+
+
+// User Route for fetching sous-categories by category ID
+Route::get('/user/get-sous-categories-by-category/{categoryId}', [RecetteController::class, 'getSousCategoriesByCategoryId']);
+// Route to view recipe details
+Route::get('/recette/detail/{id}', [RecetteController::class, 'showRecette'])->name('recette.detail');
+// Route to show the user's recipes filtered by status
+Route::get('/user/mes-recettes', [RecetteController::class, 'mesRecettes'])->name('user.mesRecettes');

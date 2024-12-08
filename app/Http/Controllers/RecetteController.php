@@ -4,34 +4,57 @@ namespace App\Http\Controllers;
 
 use App\Models\Recette;
 use App\Models\Categorie;
-// use App\Models\SousCategorie;
+use App\Models\SousCategorie;
 use Illuminate\Http\Request;
 
 class RecetteController extends Controller
 {
+    // public function addRecette(Request $request)
+    // {
+    //     // Validate incoming request
+    //     $validated = $request->validate([
+    //         'titre' => 'required|string|max:255',
+    //         'image' => 'nullable|string|max:255',
+    //         'categorie_id' => 'required|exists:categories,id',
+    //         'sous_categorie_id' => 'required|exists:sous_categories,id',
+    //         'ingredients' => 'required|string',
+    //         'methode_preparation' => 'required|string',
+    //         'informations_complementaire' => 'nullable|string',
+    //         'status' => 'nullable|string'
+    //     ]);
+
+    //     // Create the Recette
+    //     $recette = Recette::create($validated);
+
+    //     // Return success response
+    //     return response()->json([
+    //         'message' => 'Recette created successfully',
+    //         'recette' => $recette
+    //     ], 201);
+    // }
     public function addRecette(Request $request)
-    {
-        // Validate incoming request
-        $validated = $request->validate([
-            'titre' => 'required|string|max:255',
-            'image' => 'nullable|string|max:255',
-            'categorie_id' => 'required|exists:categories,id',
-            'sous_categorie_id' => 'required|exists:sous_categories,id',
-            'ingredients' => 'required|string',
-            'methode_preparation' => 'required|string',
-            'informations_complementaire' => 'nullable|string',
-            'status' => 'nullable|string'
-        ]);
+{
+    // Validation logic (if any)
+    
+    // Example: Save the recette
+    $recette = new Recette();
+    $recette->categorie_id = $request->categorie_id;
+    $recette->sous_categorie_id = $request->sous_categorie_id;
+    $recette->titre = $request->titre;
+    $recette->ingredients = $request->ingredients;
+    $recette->methode_preparation = $request->methode_preparation;
+    $recette->informations_complementaire = $request->informations_complementaire;
 
-        // Create the Recette
-        $recette = Recette::create($validated);
-
-        // Return success response
-        return response()->json([
-            'message' => 'Recette created successfully',
-            'recette' => $recette
-        ], 201);
+    if ($request->hasFile('image')) {
+        $recette->image = $request->file('image')->store('');
     }
+
+    $recette->save();
+
+    // Always return a JSON response
+    return response()->json(['message' => 'Recette added successfully!'], 200);
+}
+
 
     public function deleteRecette($id)
     {
@@ -69,12 +92,16 @@ class RecetteController extends Controller
         return response()->json(['message' => 'Recette updated successfully', 'recette' => $recette], 200);
     }
 
+
     public function getAllRecettes()
     {
-        $recettes = Recette::all();
-
+        $recettes = Recette::with(['categorie', 'sousCategorie'])->get();  // Eager loading the relationships
+    
         return response()->json($recettes, 200);
     }
+    
+    
+
 
     public function getRecetteById($id)
     {
@@ -146,6 +173,51 @@ public function getSousCategoriesByCategoryId($categoryId)
     return response()->json($sousCategories, 200);
 }
 
+
+public function consulterListRecette()
+{
+    // Fetch the user's recipes (adjust according to your models and relationships)
+    $user = auth()->user();  // Get the authenticated user
+    $recettes = $user->recettes;  // Assuming there’s a 'recettes' relationship defined in the User model
+
+    return view('user.ConsulterListRecette', compact('recettes'));
+}
+
+// RecetteController.php
+public function listRecettes()
+{
+    $recettes = Recette::all();  // Fetch all recettes from the database
+    return view('user.recettes', compact('recettes'));  // Pass the recettes to the view
+}
+
+public function showEditForm($id)
+{
+    $recette = Recette::findOrFail($id);
+    $categories = Categorie::all();  // Or adjust based on your model
+    $sousCategories = SousCategorie::all();  // Or adjust based on your model
+
+    return view('user.ModifierRecette', compact('recette', 'categories', 'sousCategories'));
+}
+
+public function showRecette($id)
+{
+    $recette = Recette::find($id);
+
+    if (!$recette) {
+        return redirect()->route('recette.list')->with('error', 'Recette not found');
+    }
+
+    return view('user.ConsulterrecetteUser', compact('recette'));
+}
+public function mesRecettes()
+{
+    // Fetch all recipes by status
+    $accepted = Recette::where('status', 'acceptée')->get();
+    $enCours = Recette::where('status', 'en cours')->get();
+    $refused = Recette::where('status', 'refusée')->get();
+
+    return view('user.MesRecettesCons', compact('accepted', 'enCours', 'refused'));
+}
 
 
 }

@@ -1,23 +1,4 @@
-<!-- Add Navigation Buttons to Other Pages -->
-<div>
-    <h1>User mes recettes cons</h1>
-    <a href="/welcome">Go to Welcome</a><br>
-    <a href="/admin/categorie">Go to Admin - ajouter Categories</a><br>
-    <a href="/admin/consulter-list-recette">Go to Admin - View Recipe List</a><br>
-    <a href="/admin/consulter-recette">Go to Admin - View Recipe</a><br>
-    <a href="/admin/modifier-recette">Go to Admin - Edit Recipe</a><br>
-    <a href="/admin/souscategorie">Go to Admin - Subcategories</a><br>
-    <a href="/user/ajouter-recette">Go to User - Add Recipe</a><br>
-    <a href="/user/categorie">Go to User - Categories</a><br>
-    <a href="/user/consulter-list-recette">Go to User - View Recipe List</a><br>
-    <a href="/user/consulter-recette">Go to User - View Recipe</a><br>
-    <a href="/user/mes-recettes">Go to User - My Recipes</a><br>
-    <a href="/user/souscategorie">Go to User - Subcategories</a><br>
-    </div>
 
-
-    
-    <!DOCTYPE html>
 <html lang="en">
  
 <head>
@@ -121,30 +102,104 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Catégorie details</h4>
+                            <h4 class="mb-sm-0">mes recettes</h4>
                         </div>
                     </div>
+                    <div class="container mt-5">
+                        <div class="row mt-4">
+                            <!-- Accepted Recipes -->
+                            <div class="col-12 mb-3">
+                                <h4>Accepted Recipes</h4>
+                                @if($accepted->count() > 0)
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Titre</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($accepted as $recette)
+                                                <tr>
+                                                    <td>{{ $recette->titre }}</td>
+                                                    <td>
+                                                        <a href="{{ route('recette.detail', $recette->id) }}" class="btn btn-info btn-sm">View</a>
+                                                        <a href="{{ route('recette.edit', $recette->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                @else
+                                    <p>No accepted recipes found.</p>
+                                @endif
+                            </div>
+                    
+                            <!-- In Progress Recipes -->
+                            <div class="col-12 mb-3">
+                                <h4>In Progress Recipes</h4>
+                                @if($enCours->count() > 0)
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Titre</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($enCours as $recette)
+                                                <tr>
+                                                    <td>{{ $recette->titre }}</td>
+                                                    <td>
+                                                        <a href="{{ route('recette.detail', $recette->id) }}" class="btn btn-info btn-sm">View</a>
+                                                        <a href="{{ route('recette.edit', $recette->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                @else
+                                    <p>No in-progress recipes found.</p>
+                                @endif
+                            </div>
+                    
+                            <!-- Refused Recipes -->
+                            <div class="col-12 mb-3">
+                                <h4>Refused Recipes</h4>
+                                @if($refused->count() > 0)
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Titre</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($refused as $recette)
+                                                <tr>
+                                                    <td>{{ $recette->titre }}</td>
+                                                    <td>
+                                                        <a href="{{ route('recette.detail', $recette->id) }}" class="btn btn-info btn-sm">View</a>
+                                                        <a href="{{ route('recette.edit', $recette->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                @else
+                                    <p>No refused recipes found.</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
-<!-- Liste des catégories -->
-<div id="all-categories-list" class="col-xl-8"></div>
-<div id="category-details"></div>
+            </div>
+        </div>
+    </div>
                                     
 
   
-<!-- Category Details Section -->
-<div id="get-category-result" class="mt-4">
-    <!-- Detailed information about a clicked category will be displayed here -->
-</div>
-                 <div class="col-xl-4">
-                    <div>
-                       
-    <div class="container">
-        <div class="card">
-            
-    </div>
 
-                        </div>
-                    </div>
-                </div>
 </body>
 </html>

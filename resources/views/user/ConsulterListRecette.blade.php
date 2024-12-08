@@ -115,37 +115,94 @@
         </div>
         <div class="sidebar-background"></div>
     </div>
+   
     <div class="main-content">
         <div class="page-content">
             <div class="container-fluid">
-                <!-- start page title -->
                 <div class="row">
                     <div class="col-12">
-                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Catégorie details</h4>
-                        </div>
+
                     </div>
                 </div>
-<!-- Liste des catégories -->
-<div id="all-categories-list" class="col-xl-8"></div>
-<div id="category-details"></div>
-                                    
 
-  
-<!-- Category Details Section -->
-<div id="get-category-result" class="mt-4">
-    <!-- Detailed information about a clicked category will be displayed here -->
-</div>
-                 <div class="col-xl-4">
-                    <div>
-                       
-    <div class="container">
-        <div class="card">
+                <div class="container">
+                    <h2>Liste des Recettes</h2>
             
+                    <table class="table table-bordered mt-4" id="recettes-table">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                {{-- <th>Catégorie</th> --}}
+                                {{-- <th>Sous-Catégorie</th> --}}
+                                <th>Ingrédients</th>
+                                <th>Status</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Recettes will be dynamically loaded here via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <script>
+                 // Fetch all recettes and populate the table
+window.addEventListener('DOMContentLoaded', function() {
+    fetchRecettes();
+});
+
+function fetchRecettes() {
+    fetch('/user/recettes')  // Ensure this endpoint returns the data in the format above
+        .then(response => response.json())
+        .then(data => {
+            const recettesTable = document.getElementById('recettes-table').getElementsByTagName('tbody')[0];
+            recettesTable.innerHTML = '';  // Clear previous data
+
+            data.forEach((recette, index) => {
+                const row = recettesTable.insertRow();
+                row.innerHTML = `
+                    <td><a href="/recette/detail/${recette.id}">${recette.titre}</a></td>
+                    <td>${recette.ingredients}</td>
+                    <td>${recette.status}</td>
+                    <td>${recette.created_at}</td>
+                    <td>${recette.updated_at}</td>
+
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="window.location.href='/recette/edit/${recette.id}'">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteRecette(${recette.id})">Delete</button>
+                    </td>
+                `;
+            });
+        })
+        .catch(error => console.error('Error fetching recettes:', error));
+}
+
+function deleteRecette(id) {
+    if (confirm('Are you sure you want to delete this recette?')) {
+        fetch(`/recette/delete/${id}`, { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                fetchRecettes();  // Refresh the list
+            })
+            .catch(error => console.error('Error deleting recette:', error));
+    }
+}
+
+function editRecette(id) {
+    // Redirect to edit page (or show a modal for editing)
+    window.location.href = `/recette/edit/${id}`;
+}
+                </script>                
+            </div>
+        </div>
     </div>
 
-                        </div>
-                    </div>
-                </div>
+                
+  {{--                     <td>${recette.categorie ? recette.categorie.titre : 'N/A'}</td>
+ --}}
+
 </body>
 </html>

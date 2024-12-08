@@ -1,4 +1,24 @@
-<!DOCTYPE html>
+<!-- Add Navigation Buttons to Other Pages -->
+<div>
+    <h1>User - Consulter list recette user</h1>
+    <a href="/welcome">Go to Welcome</a><br>
+    <a href="/admin/categorie">Go to Admin - ajouter Categories</a><br>
+    <a href="/admin/consulter-list-recette">Go to Admin - View Recipe List</a><br>
+    <a href="/admin/consulter-recette">Go to Admin - View Recipe</a><br>
+    <a href="/admin/modifier-recette">Go to Admin - Edit Recipe</a><br>
+    <a href="/admin/souscategorie">Go to Admin - Subcategories</a><br>
+    <a href="/user/ajouter-recette">Go to User - Add Recipe</a><br>
+    <a href="/user/categorie">Go to User - Categories</a><br>
+    <a href="/user/consulter-list-recette">Go to User - View Recipe List</a><br>
+    <a href="/user/consulter-recette">Go to User - View Recipe</a><br>
+    <a href="/user/mes-recettes">Go to User - My Recipes</a><br>
+    <a href="/user/souscategorie">Go to User - Subcategories</a><br>
+    </div>
+
+
+
+    
+    <!DOCTYPE html>
 <html lang="en">
  
 <head>
@@ -11,17 +31,13 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/aos/aos.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.min.css') }}">
     <title>Admin - Manage Categories</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap CSS (Bootstrap 5) -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Bootstrap JS (Bootstrap 5) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 </head>
  
 <body>
- 
     <header id="page-topbar">
         <div class="layout-width">
             <div class="navbar-header">
@@ -99,187 +115,187 @@
         </div>
         <div class="sidebar-background"></div>
     </div>
+   
     <div class="main-content">
         <div class="page-content">
             <div class="container-fluid">
-                <!-- start page title -->
                 <div class="row">
                     <div class="col-12">
-                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Recette liste</h4>
-                        </div>
+
                     </div>
                 </div>
-               
 
- 
- 
                 <div class="container">
-                    <h2 class="my-4">Manage Recettes</h2>
+                    <h2>Liste des Recettes</h2>
             
-                    <!-- Add Recipe Form -->
-                    <h3>Add a New Recette</h3>
-                    <form action="/recettes" method="POST" enctype="multipart/form-data">
-                        <!-- Replace with appropriate CSRF token for security -->
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            
-                        <div class="form-group">
-                            <label for="titre">Title</label>
-                            <input type="text" name="titre" id="titre" class="form-control" required>
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="image">Image (optional)</label>
-                            <input type="file" name="image" id="image" class="form-control">
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="categorie_id">Category</label>
-                            <select name="categorie_id" id="categorie_id" class="form-control" required>
-                                <!-- Categories will be dynamically loaded here -->
-                            </select>
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="sous_categorie_id">Sous-Category</label>
-                            <select name="sous_categorie_id" id="sous_categorie_id" class="form-control" required>
-                                <!-- Sous-categories will be dynamically loaded here -->
-                            </select>
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="ingredients">Ingredients</label>
-                            <textarea name="ingredients" id="ingredients" class="form-control" rows="4" required></textarea>
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="methode_preparation">Preparation Method</label>
-                            <textarea name="methode_preparation" id="methode_preparation" class="form-control" rows="4" required></textarea>
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="informations_complementaire">Additional Information (optional)</label>
-                            <textarea name="informations_complementaire" id="informations_complementaire" class="form-control" rows="4"></textarea>
-                        </div>
-            <br>
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            <select name="status" id="status" class="form-control">
-                                <option value="acceptée">Accepted</option>
-                                <option value="en cours">In Progress</option>
-                                <option value="refusée">Rejected</option>
-                            </select>
-                        </div>
-            
-                        <button type="submit" class="btn btn-primary">Add Recette</button>
-                    </form>
-            
-                    <hr>
-            
-                    <!-- Display all recipes -->
-                    <h3>All Recettes</h3>
-                    <table class="table table-striped">
+                    <table class="table table-bordered mt-4" id="recettes-table">
                         <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Category</th>
-                                <th>Sous-Category</th>
-                                <th>Ingredients</th>
-                                <th>Preparation Method</th>
+                                <th>Titre</th>
+                                {{-- <th>Catégorie</th> --}}
+                                {{-- <th>Sous-Catégorie</th> --}}
+                                <th>Ingrédients</th>
                                 <th>Status</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Loop through recettes -->
-                            <tr>
-                                <td>Recipe 1</td>
-                                <td>Category 1</td>
-                                <td>Sous-Category 1</td>
-                                <td>Ingredients for recipe 1</td>
-                                <td>Method for recipe 1</td>
-                                <td>Accepted</td>
-                                <td>
-                                    <a href="/recettes/1/edit" class="btn btn-warning">Edit</a>
-                                    <form action="/recettes/1" method="POST" style="display:inline;">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <!-- Repeat for other recipes -->
+                            <!-- Recettes will be dynamically loaded here via JavaScript -->
                         </tbody>
                     </table>
                 </div>
- 
- 
-    <script>
-        // Function to load categories dynamically
-        function loadCategories() {
-            fetch('/admin/get-all-categories')
-                .then(response => response.json())
-                .then(data => {
-                    const categorySelect = document.getElementById('categorie_id');
-                    data.forEach(category => {
-                        const option = document.createElement('option');
-                        option.value = category.id;
-                        option.textContent = category.titre;
-                        categorySelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Erreur lors du chargement des catégories:', error));
-        }
 
-// Function to load sous-categories dynamically based on selected category
-function loadSousCategories(categoryId) {
-    // Check if categoryId is valid
-    if (!categoryId) {
-        console.error("Invalid category ID:", categoryId);
-        return;
-    }
-
-    // Fetch sous-categories based on selected category ID
-    fetch(`/admin/get-all-sous-categories/${categoryId}`)
-        .then(response => response.json())
-        .then(data => {
-            // Get the sous-categorie dropdown
-            const sousCategorieSelect = document.getElementById('sous_categorie_id');
-            sousCategorieSelect.innerHTML = ''; // Clear previous options
-
-            if (data.length === 0) {
-                // If no sous-categories are found, you can show a message or disable the dropdown
-                const option = document.createElement('option');
-                option.textContent = "No sous-categories available";
-                sousCategorieSelect.appendChild(option);
-            } else {
-                // Populate the sous-categorie dropdown with the fetched data
-                data.forEach(sousCategory => {
-                    const option = document.createElement('option');
-                    option.value = sousCategory.id;
-                    option.textContent = sousCategory.titre;
-                    sousCategorieSelect.appendChild(option);
-                });
-            }
-        })
-        .catch(error => console.error('Error loading sous-categories:', error));
-}
-
-// Event listener for category change to load corresponding sous-categories
-document.getElementById('categorie_id').addEventListener('change', function () {
-    const categoryId = this.value;
-    if (categoryId) {
-        loadSousCategories(categoryId); // Load sous-categories when category changes
-    } else {
-        document.getElementById('sous_categorie_id').innerHTML = ''; // Clear sous-categories if no category selected
-    }
+                <script>
+                 // Fetch all recettes and populate the table
+window.addEventListener('DOMContentLoaded', function() {
+    fetchRecettes();
 });
 
+// function fetchRecettes() {
+//     fetch('/user/recettes')  // Ensure this endpoint returns the data in the format above
+//         .then(response => response.json())
+//         .then(data => {
+//             const recettesTable = document.getElementById('recettes-table').getElementsByTagName('tbody')[0];
+//             recettesTable.innerHTML = '';  // Clear previous data
 
-        // Load categories when the page is ready
-        window.onload = loadCategories;
-    </script>
+//             data.forEach((recette, index) => {
+//                 const row = recettesTable.insertRow();
+//                 row.innerHTML = `
+//                     <td>${recette.titre}</td>
+//                     <td>${recette.ingredients}</td>
+//                     <td>${recette.status}</td>
+//                     <td>${recette.created_at}</td>
+//                     <td>${recette.updated_at}</td>
+
+//                     <td>
+//                         <button class="btn btn-warning btn-sm" onclick="window.location.href='/recette/edit/${recette.id}'">Edit</button>
+//                         <button class="btn btn-danger btn-sm" onclick="deleteRecette(${recette.id})">Delete</button>
+//                     </td>
+//                 `;
+//             });
+//         })
+//         .catch(error => console.error('Error fetching recettes:', error));
+// }
+
+function fetchRecettes() {
+    fetch('/user/recettes')  // Ensure this endpoint returns the data in the format above
+        .then(response => response.json())
+        .then(data => {
+            const recettesTable = document.getElementById('recettes-table').getElementsByTagName('tbody')[0];
+            recettesTable.innerHTML = '';  // Clear previous data
+
+            // Inject the CSS for styling the status options
+            const style = document.createElement('style');
+            style.innerHTML = `
+                /* Apply colors for the select dropdown background */
+                .status-select {
+                    background-color: white; /* Default background */
+                    color: black;
+                }
+
+                .status-acceptée {
+                    background-color: green;
+                    color: white;
+                }
+
+                .status-en-cours {
+                    background-color: orange;
+                    color: white;
+                }
+
+                .status-refusée {
+                    background-color: red;
+                    color: white;
+                }
+
+                /* Optional: Add a color when the select dropdown is clicked */
+                .status-select:focus {
+                    border-color: #5c636a;
+                    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Populate the table with the fetched data
+            data.forEach((recette, index) => {
+                const row = recettesTable.insertRow();
+                row.innerHTML = `
+                    <td>${recette.titre}</td>
+                    <td>${recette.ingredients}</td>
+                    <td>
+                        <select id="status-select-${recette.id}" class="form-control status-select" onchange="updateStatus(${recette.id})">
+                            <option value="acceptée" class="status-acceptée" ${recette.status === 'acceptée' ? 'selected' : ''}>Acceptée</option>
+                            <option value="en cours" class="status-en-cours" ${recette.status === 'en cours' ? 'selected' : ''}>En Cours</option>
+                            <option value="refusée" class="status-refusée" ${recette.status === 'refusée' ? 'selected' : ''}>Refusée</option>
+                        </select>
+                    </td>
+                    <td>${recette.created_at}</td>
+                    <td>${recette.updated_at}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="window.location.href='/recette/edit/${recette.id}'">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteRecette(${recette.id})">Delete</button>
+                    </td>
+                `;
+            });
+        })
+        .catch(error => console.error('Error fetching recettes:', error));
+}
+
+function updateStatus(id) {
+    const status = document.getElementById('status-select-' + id).value;
+
+    fetch(`/recette/update-status/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ status: status })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'Statut mis à jour avec succès') {
+            alert('Le statut a été mis à jour avec succès');
+            fetchRecettes(); // Refresh the list to show the updated status
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error updating status:', error);
+        alert('An error occurred while updating the status. Please try again.');
+    });
+}
+
+
+function deleteRecette(id) {
+    if (confirm('Are you sure you want to delete this recette?')) {
+        fetch(`/recette/delete/${id}`, { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                fetchRecettes();  // Refresh the list
+            })
+            .catch(error => console.error('Error deleting recette:', error));
+    }
+}
+
+function editRecette(id) {
+    // Redirect to edit page (or show a modal for editing)
+    window.location.href = `/recette/edit/${id}`;
+}
+
+                </script>                
+            </div>
+        </div>
+    </div>
+
+    
+                
+  {{--                     <td>${recette.categorie ? recette.categorie.titre : 'N/A'}</td>
+ --}}
+
 </body>
- 
 </html>
- 
