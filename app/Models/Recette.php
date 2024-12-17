@@ -30,4 +30,9 @@ class Recette extends Model
     {
         return $this->belongsTo(SousCategorie::class);
     }
+
+    public function rates()
+    {
+        return $this->hasMany(Rate::class);
+    }
 }

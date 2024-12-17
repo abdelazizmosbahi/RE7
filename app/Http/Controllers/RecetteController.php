@@ -9,29 +9,6 @@ use Illuminate\Http\Request;
 
 class RecetteController extends Controller
 {
-    // public function addRecette(Request $request)
-    // {
-    //     // Validate incoming request
-    //     $validated = $request->validate([
-    //         'titre' => 'required|string|max:255',
-    //         'image' => 'nullable|string|max:255',
-    //         'categorie_id' => 'required|exists:categories,id',
-    //         'sous_categorie_id' => 'required|exists:sous_categories,id',
-    //         'ingredients' => 'required|string',
-    //         'methode_preparation' => 'required|string',
-    //         'informations_complementaire' => 'nullable|string',
-    //         'status' => 'nullable|string'
-    //     ]);
-
-    //     // Create the Recette
-    //     $recette = Recette::create($validated);
-
-    //     // Return success response
-    //     return response()->json([
-    //         'message' => 'Recette created successfully',
-    //         'recette' => $recette
-    //     ], 201);
-    // }
     public function addRecette(Request $request)
 {
     // Validation logic (if any)
@@ -93,26 +70,43 @@ class RecetteController extends Controller
     }
 
 
+    // public function getAllRecettes()
+    // {
+    //     $recettes = Recette::with(['categorie', 'sousCategorie'])->get();  // Eager loading the relationships
+    
+    //     return response()->json($recettes, 200);
+    // }
     public function getAllRecettes()
-    {
-        $recettes = Recette::with(['categorie', 'sousCategorie'])->get();  // Eager loading the relationships
-    
-        return response()->json($recettes, 200);
-    }
-    
+{
+    $recettes = Recette::with(['categorie', 'sousCategorie', 'rates'])->get();
+
+    return response()->json($recettes, 200);
+}
+
     
 
 
+    // public function getRecetteById($id)
+    // {
+    //     $recette = Recette::find($id);
+
+    //     if (!$recette) {
+    //         return response()->json(['message' => 'Recette not found'], 404);
+    //     }
+
+    //     return response()->json($recette, 200);
+    // }
     public function getRecetteById($id)
-    {
-        $recette = Recette::find($id);
+{
+    $recette = Recette::with('rates')->find($id);
 
-        if (!$recette) {
-            return response()->json(['message' => 'Recette not found'], 404);
-        }
-
-        return response()->json($recette, 200);
+    if (!$recette) {
+        return response()->json(['message' => 'Recette not found'], 404);
     }
+
+    return response()->json($recette, 200);
+}
+
 
 
     public function getAcceptedRecipes()
@@ -217,6 +211,52 @@ public function mesRecettes()
     $refused = Recette::where('status', 'refusée')->get();
 
     return view('user.MesRecettesCons', compact('accepted', 'enCours', 'refused'));
+}
+
+// public function showRecetteDetails($id)
+// {
+//     $recette = Recette::find($id);
+
+//     if (!$recette) {
+//         return redirect()->route('userhome')->with('error', 'Recette not found');
+//     }
+
+//     return view('user.recettedetails', compact('recette'));
+// }
+public function showRecetteDetails($id)
+{
+    $recette = Recette::with('rates')->find($id); // Eager load the rates
+
+    if (!$recette) {
+        return redirect()->route('userhome')->with('error', 'Recette not found');
+    }
+
+    // Calculate the average rating (moyenne)
+    $averageRating = $recette->rates->avg('stars'); // Calculates average stars
+
+    return view('user.recettedetails', compact('recette', 'averageRating'));
+}
+
+
+
+public function rate(Request $request, $id)
+{
+    $request->validate([
+        'rating' => 'required|integer|min:1|max:5',
+    ]);
+
+    $recette = Recette::find($id);
+    if (!$recette) {
+        return redirect()->route('userhome')->with('error', 'Recette not found.');
+    }
+
+    // Save the rating (this assumes you have a ratings table or column)
+    $recette->ratings()->create([
+        'rating' => $request->rating,
+        'user_id' => auth()->id(), // Assuming user is logged in
+    ]);
+
+    return redirect()->back()->with('success', 'Thank you for rating!');
 }
 
 

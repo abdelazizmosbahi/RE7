@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\SousCategorieController;
 use App\Http\Controllers\RecetteController;
+use App\Http\Controllers\RateController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -12,7 +13,18 @@ use App\Http\Controllers\RecetteController;
 Route::get('/welcome', function () {
     return view('welcome');
 });
+Route::get('/userhome', function () {
+    return view('user.userhome');
+});
+Route::get('/admin/rates', function () {
+    return view('admin.rate_management');
+})->name('admin.rate_management');
 
+Route::get('/userhome', [CategorieController::class, 'showUserHome']);
+Route::get('/user/recette-details/{id}', [RecetteController::class, 'showRecetteDetails'])->name('recette.details');
+Route::post('/rate/add', [RateController::class, 'addRate'])->name('rate.add');
+Route::get('/admin/rates', [RateController::class, 'showRateManagement'])->name('admin.rate_management');
+Route::put('/rate/update-status/{id}', [RateController::class, 'updateStatus'])->name('rate.updateStatus');
 
 
 // Admin routes

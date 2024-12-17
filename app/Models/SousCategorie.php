@@ -19,4 +19,11 @@ class SousCategorie extends Model
         return $this->belongsTo(Categorie::class, 'categorie_id'); // Replace 'categorie_id' with your actual foreign key
 
     }
+
+    // SousCategorie Model
+public function recettes()
+{
+    return $this->hasMany(Recette::class);
+}
+
 }

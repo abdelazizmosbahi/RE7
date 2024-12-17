@@ -170,5 +170,15 @@ public function show($id)
     return view('admin.CategorieAdmin', compact('categories')); // Load the categories list view
 }
 
+public function showUserHome()
+{
+    // Fetch categories, subcategories, and recettes in one go
+    $categories = Categorie::with(['sousCategories.recettes'])->get();
+
+    // Pass categories to the view
+    return view('user.userhome', compact('categories'));
+}
+
+
 
 }
