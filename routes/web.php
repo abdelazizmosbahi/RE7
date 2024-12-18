@@ -25,6 +25,7 @@ Route::get('/user/recette-details/{id}', [RecetteController::class, 'showRecette
 Route::post('/rate/add', [RateController::class, 'addRate'])->name('rate.add');
 Route::get('/admin/rates', [RateController::class, 'showRateManagement'])->name('admin.rate_management');
 Route::put('/rate/update-status/{id}', [RateController::class, 'updateStatus'])->name('rate.updateStatus');
+Route::delete('/rate/{id}/delete', [RateController::class, 'deleteRate'])->name('rate.delete');
 
 
 // Admin routes

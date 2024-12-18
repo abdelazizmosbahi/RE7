@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/aos/aos.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.min.css') }}">
     <title>Admin - Manage Categories</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
@@ -126,8 +127,29 @@
                                                             <div class="col-md-4 mb-4">
                                                                 <!-- Recipe Card -->
                                                                 <div class="card">
-                                                                    <div class="card-header">
-                                                                        <h5 class="card-title">{{ $recette->titre }}</h5>
+                                                                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                                                        <h5 class="card-title" style="margin: 0;">{{ $recette->titre }}</h5>
+                                                                        <!-- Display Average Rating -->
+                                                                        @php
+                                                                            // Calculate average rating only for approved rates
+                                                                            $approvedRates = $recette->rates->where('status', 'approved');
+                                                                            $averageRating = $approvedRates->avg('stars');
+                                                                            $averageRatingRounded = round($averageRating); // Rounded to nearest integer
+                                                                        @endphp
+                                                                        <span style="margin: 0;">
+                                                                            @if($averageRating)
+                                                                                <!-- Loop through to display star icons -->
+                                                                                @for($i = 1; $i <= 5; $i++)
+                                                                                    @if($i <= $averageRatingRounded)
+                                                                                        <i class="fa fa-star" style="color: gold;"></i> <!-- Filled star -->
+                                                                                    @else
+                                                                                        <i class="fa fa-star-o" style="color: gold;"></i> <!-- Empty star -->
+                                                                                    @endif
+                                                                                @endfor
+                                                                            @else
+                                                                                <span>(No ratings)</span>
+                                                                            @endif
+                                                                        </span>
                                                                     </div>
                                                                     <div class="card-body">
                                                                         <!-- Display Recette Image -->
@@ -156,6 +178,7 @@
                             @endforeach
                         </div>
                     </div>
+                    
                     
                     
                 </div>

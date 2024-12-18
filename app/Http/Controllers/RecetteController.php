@@ -9,7 +9,29 @@ use Illuminate\Http\Request;
 
 class RecetteController extends Controller
 {
-    public function addRecette(Request $request)
+//     public function addRecette(Request $request)
+// {
+//     // Validation logic (if any)
+    
+//     // Example: Save the recette
+//     $recette = new Recette();
+//     $recette->categorie_id = $request->categorie_id;
+//     $recette->sous_categorie_id = $request->sous_categorie_id;
+//     $recette->titre = $request->titre;
+//     $recette->ingredients = $request->ingredients;
+//     $recette->methode_preparation = $request->methode_preparation;
+//     $recette->informations_complementaire = $request->informations_complementaire;
+
+//     if ($request->hasFile('image')) {
+//         $recette->image = $request->file('image')->store('');
+//     }
+
+//     $recette->save();
+
+//     // Always return a JSON response
+//     return response()->json(['message' => 'Recette added successfully!'], 200);
+// }
+public function addRecette(Request $request)
 {
     // Validation logic (if any)
     
@@ -22,8 +44,10 @@ class RecetteController extends Controller
     $recette->methode_preparation = $request->methode_preparation;
     $recette->informations_complementaire = $request->informations_complementaire;
 
+    // Handle image upload and store it in the 'public' disk in 'recettes_images' folder
     if ($request->hasFile('image')) {
-        $recette->image = $request->file('image')->store('');
+        // Store image in the 'recettes_images' folder within the 'public' disk
+        $recette->image = $request->file('image')->store('recettes_images', 'public');
     }
 
     $recette->save();
@@ -31,6 +55,7 @@ class RecetteController extends Controller
     // Always return a JSON response
     return response()->json(['message' => 'Recette added successfully!'], 200);
 }
+
 
 
     public function deleteRecette($id)
@@ -47,35 +72,35 @@ class RecetteController extends Controller
     }
 
     public function updateRecette(Request $request, $id)
-    {
-        $recette = Recette::find($id);
+{
+    $recette = Recette::find($id);
 
-        if (!$recette) {
-            return response()->json(['message' => 'Recette not found'], 404);
-        }
-
-        $validated = $request->validate([
-            'titre' => 'required|string|max:255',
-            'image' => 'nullable|string|max:255',
-            'ingredients' => 'required|string',
-            'methode_preparation' => 'required|string',
-            'informations_complementaire' => 'nullable|string',
-            'status' =>'nullable|string'
-
-        ]);
-
-        $recette->update($validated);
-
-        return response()->json(['message' => 'Recette updated successfully', 'recette' => $recette], 200);
+    if (!$recette) {
+        return response()->json(['message' => 'Recette not found'], 404);
     }
 
+    $validated = $request->validate([
+        'titre' => 'required|string|max:255',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  // Added validation for image
+        'ingredients' => 'required|string',
+        'methode_preparation' => 'required|string',
+        'informations_complementaire' => 'nullable|string',
+        'status' => 'nullable|string'
+    ]);
 
-    // public function getAllRecettes()
-    // {
-    //     $recettes = Recette::with(['categorie', 'sousCategorie'])->get();  // Eager loading the relationships
-    
-    //     return response()->json($recettes, 200);
-    // }
+    // Handle the image if uploaded
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('recettes', 'public');
+        $validated['image'] = $imagePath; // Update the validated array with the image path
+    }
+
+    // Update the recette with validated data (including image if uploaded)
+    $recette->update($validated);
+
+    return response()->json(['message' => 'Recette updated successfully', 'recette' => $recette], 200);
+}
+
+
     public function getAllRecettes()
 {
     $recettes = Recette::with(['categorie', 'sousCategorie', 'rates'])->get();

@@ -148,10 +148,12 @@
     <div class="mb-3">
         <label for="update-image" class="form-label">Image</label>
         <input type="file" class="form-control" id="update-image" name="image" accept="image/*">
-        <!-- Optionally show the current image here if exists -->
-        {{-- @if($recette->image)
+        @if($recette->image)
+        <div>
             <img src="{{ asset('storage/'.$recette->image) }}" alt="Current Image" width="100">
-        @endif --}}
+        </div>
+    @endif
+    
     </div>
 
     <div class="form-group">
@@ -222,14 +224,13 @@
 
 
                 <script>
-                   document.getElementById('updateRecetteForm').addEventListener('submit', function (e) {
+                 document.getElementById('updateRecetteForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
     const formData = new FormData(this);
 
-    // Use the correct route for updating the recette
     fetch('{{ route("recette.update", $recette->id) }}', {
-        method: 'POST', // Use POST for the form submission
+        method: 'POST', // POST is the correct method
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         },
@@ -240,18 +241,16 @@
             // If the response isn't OK, throw an error
             throw new Error('Network response was not OK');
         }
-        // Try to parse JSON
-        return response.json();
+        return response.json(); // Try to parse JSON
     })
     .then(data => {
-        // Show the success message
+        // Show success message
         const successMessage = document.getElementById('update-success-message');
         successMessage.style.display = 'block';
 
-        // Wait a moment to let the user see the success message
         setTimeout(() => {
-            window.location.href = "/user/consulter-list-recette";  // Use your actual path here
-        }, 2000); // Adjust delay (2 seconds here) as needed
+            window.location.href = "/user/consulter-list-recette";  // Adjust the path
+        }, 2000); // Adjust the delay (2 seconds)
     })
     .catch(error => {
         console.error('Error:', error);
@@ -259,10 +258,7 @@
     });
 });
 
+
                 </script>
-
-                
-  
-
 
 </html>

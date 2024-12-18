@@ -25,7 +25,9 @@ class RateController extends Controller
 
         // 'user_id' => null, // Commented out for now
     ]);
-
+    // After saving the rating, add the session variable to trigger the page reload
+    session()->flash('rating_submitted', true);
+    
     // Redirect back to the recette details page with a success message
     return redirect()->route('recette.details', ['id' => $validated['recette_id']])
                      ->with('success', 'Rate added successfully!');
@@ -43,42 +45,22 @@ class RateController extends Controller
         return response()->json($recette->rates, 200);
     }
 
-    // Delete a rate
-    public function deleteRate($id)
-    {
-        $rate = Rate::find($id);
+// In RateController
+public function deleteRate($id)
+{
+    $rate = Rate::find($id);
 
-        if (!$rate) {
-            return response()->json(['message' => 'Rate not found'], 404);
-        }
-
-        $rate->delete();
-
-        return response()->json(['message' => 'Rate deleted successfully!'], 200);
+    if (!$rate) {
+        return response()->json(['message' => 'Rate not found'], 404);
     }
 
-    // public function updateRateStatus(Request $request, $id)
-    // {
-    //     $rate = Rate::find($id);
+    $rate->delete();
 
-    //     if (!$rate) {
-    //         return redirect()->route('recette.details', ['id' => $rate->recette_id])
-    //                          ->with('error', 'Rate not found');
-    //     }
+    return redirect()->back()->with('message', 'Rate deleted successfully!');
+}
 
-    //     // Update status or delete the rate
-    //     if ($request->has('approve')) {
-    //         $rate->status = 'approved';
-    //         $rate->save();
-    //         return redirect()->route('recette.details', ['id' => $rate->recette_id])
-    //                          ->with('success', 'Rate approved successfully!');
-    //     } elseif ($request->has('delete')) {
-    //         $rate->delete();
-    //         return redirect()->route('recette.details', ['id' => $rate->recette_id])
-    //                          ->with('success', 'Rate deleted successfully!');
-    //     }
-    // }
-    // In your RateController
+
+
 public function updateStatus(Request $request, $id)
 {
     $rate = Rate::findOrFail($id);
@@ -99,6 +81,24 @@ public function showRateManagement()
     $rates = Rate::with('recette')->get();
 
     return view('admin.rate_management', compact('rates'));
+}
+
+public function showRecetteDetails($id)
+{
+    // Fetch the recette with its approved rates
+    $recette = Recette::with(['rates' => function ($query) {
+        $query->where('status', 'approved');
+    }])->find($id);
+
+    if (!$recette) {
+        return redirect()->route('userhome')->with('error', 'Recette not found');
+    }
+
+    // Calculate the average rating of the approved rates
+    $approvedRates = $recette->rates;
+    $averageRating = $approvedRates->avg('stars'); // Calculate average rating
+
+    return view('user.recettedetails', compact('recette', 'averageRating', 'approvedRates'));
 }
 
 

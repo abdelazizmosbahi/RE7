@@ -14,6 +14,8 @@
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
 
 
 </head>
@@ -149,15 +151,33 @@
                     <!-- Recette Details Section (Left side) -->
                     <div class="col-md-8">
                         <div class="card">
-                            <div class="card-header">
-                                <h2>{{ $recette->titre }} </h2>
-                                 <!-- Average Rating Inside Recipe Card -->
-                             {{-- <strong>Average Rating:</strong>  --}}
-                                <strong>
-                                    {{ $averageRating ? number_format($averageRating, 1) : 'No ratings yet' }}/5
-                                </strong>
+                            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                <h2 style="margin: 0;">{{ $recette->titre }}</h2>
+                                <!-- Average Rating as Stars -->
+                                @php
+                                    // Filter the rates by status 'approved'
+                                    $approvedRates = $recette->rates->where('status', 'approved');
+                                    // Calculate the average rating only from approved rates
+                                    $averageRating = $approvedRates->avg('stars');
+                                    $averageRatingRounded = round($averageRating); // Rounded to nearest integer
+                                @endphp
+                                <span style="margin: 0;">
+                                    @if($averageRating)  <!-- Display stars if there's any approved rating -->
+                                        @for($i = 1; $i <= 5; $i++)
+                                            @if($i <= $averageRatingRounded)
+                                                <i class="fa fa-star" style="color: gold;"></i> <!-- Filled star -->
+                                            @else
+                                                <i class="fa fa-star-o" style="color: gold;"></i> <!-- Empty star -->
+                                            @endif
+                                        @endfor
+                                    @else
+                                        <span>(No ratings yet)</span>
+                                    @endif
+                                </span>
                             </div>
                             <div class="card-body">
+                                <img src="{{ asset('storage/' . $recette->image) }}" alt="{{ $recette->titre }}" width="200">
+
                                 <p><strong>Ingrédients:</strong></p>
                                 <p>{{ $recette->ingredients }}</p>
                                 <p><strong>Method of Preparation:</strong></p>
@@ -186,10 +206,17 @@
                                     @csrf
                                     <input type="hidden" name="recette_id" value="{{ $recette->id }}">
             
-                                    <!-- Stars -->
+                                    <!-- Stars Input -->
                                     <div class="mb-3">
-                                        <label for="stars" class="form-label">Stars (1-5):</label>
-                                        <input type="number" id="stars" name="stars" class="form-control" min="1" max="5" required>
+                                        <label class="form-label">Your Rating:</label>
+                                        <div class="rating" style="font-size: 1.5rem;">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <input type="radio" id="star{{ $i }}" name="stars" value="{{ $i }}" style="display: none;" required>
+                                                <label for="star{{ $i }}" style="cursor: pointer;">
+                                                    <i class="fa fa-star-o star-icon" data-value="{{ $i }}" style="color: gold;"></i>
+                                                </label>
+                                            @endfor
+                                        </div>
                                     </div>
             
                                     <!-- Comment -->
@@ -205,43 +232,77 @@
                         </div>
                     </div>
                 </div>
-            </div>
             
-               
-            </div>
-            
-            <!-- Display the Comments in a Message Box Style -->
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Comments</h4>
-                        </div>
-                        <div class="card-body">
-                            @forelse($recette->rates as $rate)
-                                <div class="alert alert-info mb-3">
-                                    <!-- User Icon -->
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-user-circle fa-2x mr-2"></i>
-                                        <div>
-                                            <p><strong>Comment:</strong> {{ $rate->comment ?? 'No comment' }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            @empty
-                                <p>No comments yet for this recipe.</p>
-                            @endforelse
+                <!-- Display the Comments in a Message Box Style -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Comments</h4>
+                            </div>
+                            <div class="card-body">
+                                @if($approvedRates->isEmpty() || $approvedRates->every(fn($rate) => is_null($rate->comment) || $rate->comment === ''))
+                                    <p>No comments yet for this recipe.</p>
+                                @else
+                                    @foreach($approvedRates as $rate)
+                                        @if($rate->comment)  <!-- Display the comment if not null -->
+                                            <div class="alert alert-info mb-3">
+                                                <!-- User Icon -->
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-user-circle fa-2x mr-2"></i>
+                                                    <div>
+                                                        <p><strong>Comment:</strong> {{ $rate->comment }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+
             
-    </div>
-</div>
+                <script>
+                    // Select all the star icons
+                    const stars = document.querySelectorAll('.star-icon');
+                    const inputs = document.querySelectorAll('input[name="stars"]');
+                
+                    // Add click event to each star
+                    stars.forEach(star => {
+                        star.addEventListener('click', function () {
+                            const rating = this.getAttribute('data-value');
+                
+                            // Set all stars up to the clicked star as active (filled)
+                            stars.forEach(s => {
+                                const starValue = s.getAttribute('data-value');
+                                if (starValue <= rating) {
+                                    s.classList.remove('fa-star-o');
+                                    s.classList.add('fa-star');
+                                } else {
+                                    s.classList.remove('fa-star');
+                                    s.classList.add('fa-star-o');
+                                }
+                            });
+                
+                            // Set the corresponding radio button as checked
+                            inputs.forEach(input => {
+                                if (input.value === rating) {
+                                    input.checked = true;
+                                }
+                            });
+                        });
+                    });
+                
+                    // Refresh the page after a successful rating submission
+                    @if(session('rating_submitted'))
+                        window.location.reload();
+                    @endif
+                </script>
+                
+            
 
-                                    
-
-  
 
 
 </body>

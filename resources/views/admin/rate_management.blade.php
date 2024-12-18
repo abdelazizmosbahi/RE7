@@ -17,7 +17,7 @@
             <th>Stars</th>
             <th>Comment</th>
             <th>Status</th>
-            <th>Recette Title</th> <!-- Column for recette title -->
+            <th>Recette Title</th>
         </tr>
     </thead>
     <tbody>
@@ -26,25 +26,71 @@
             <td>{{ $rate->stars }}</td>
             <td>{{ $rate->comment }}</td>
             <td>
-                <form action="{{ route('rate.updateStatus', $rate->id) }}" method="POST">
+                <form action="{{ route('rate.updateStatus', $rate->id) }}" method="POST" id="rate-form-{{ $rate->id }}">
                     @csrf
                     @method('PUT')
-                    <select name="status" class="form-control" onchange="this.form.submit()">
+                    <select name="status" class="form-control status-select" data-rate-id="{{ $rate->id }}">
                         <option value="in progress" {{ $rate->status == 'in progress' ? 'selected' : '' }}>In Progress</option>
                         <option value="approved" {{ $rate->status == 'approved' ? 'selected' : '' }}>Approved</option>
                         <option value="deleted" {{ $rate->status == 'deleted' ? 'selected' : '' }}>Deleted</option>
                     </select>
                 </form>
             </td>
-            <!-- Displaying the recette's title -->
-            <td>{{ $rate->recette->titre }}</td> <!-- Accessing the titre of the related recette -->
+            <td>{{ $rate->recette->titre }}</td>
         </tr>
         @endforeach
     </tbody>
-</table>
+    </table>
+
+    <!-- Modal for Delete Confirmation -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this rate?
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteForm" method="POST" action="">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Attach the event listener to all the status select dropdowns
+    document.querySelectorAll('.status-select').forEach(function(select) {
+        select.addEventListener('change', function() {
+            const selectedStatus = this.value;
+            const rateId = this.getAttribute('data-rate-id');
+            const deleteForm = document.getElementById('deleteForm');
+
+            if (selectedStatus === 'deleted') {
+                // Prevent the form from being submitted immediately
+                const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                deleteModal.show();
+                
+                // Set the delete form action with the correct rate ID
+                deleteForm.action = '/rate/' + rateId + '/delete'; // Adjust the delete route if necessary
+            } else {
+                // If not deleted, submit the form directly
+                document.getElementById('rate-form-' + rateId).submit();
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
