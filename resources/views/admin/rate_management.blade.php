@@ -14,10 +14,10 @@
     <table class="table">
     <thead>
         <tr>
-            <th>Stars</th>
-            <th>Comment</th>
+            <th>Note</th>
+            <th>Commentaire</th>
             <th>Status</th>
-            <th>Recette Title</th>
+            <th>Titre</th>
         </tr>
     </thead>
     <tbody>
@@ -30,9 +30,9 @@
                     @csrf
                     @method('PUT')
                     <select name="status" class="form-control status-select" data-rate-id="{{ $rate->id }}">
-                        <option value="in progress" {{ $rate->status == 'in progress' ? 'selected' : '' }}>In Progress</option>
-                        <option value="approved" {{ $rate->status == 'approved' ? 'selected' : '' }}>Approved</option>
-                        <option value="deleted" {{ $rate->status == 'deleted' ? 'selected' : '' }}>Deleted</option>
+                        <option value="in progress" {{ $rate->status == 'in progress' ? 'selected' : '' }}>En cours</option>
+                        <option value="approved" {{ $rate->status == 'approved' ? 'selected' : '' }}>Approuvé</option>
+                        <option value="deleted" {{ $rate->status == 'deleted' ? 'selected' : '' }}>Supprimé</option>
                     </select>
                 </form>
             </td>
@@ -47,18 +47,17 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmer la suppression</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this rate?
-                </div>
+                    Etes-vous sûr de vouloir supprimer ce tarif ?                </div>
                 <div class="modal-footer">
                     <form id="deleteForm" method="POST" action="">
                         @csrf
                         @method('DELETE')
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
                     </form>
                 </div>
             </div>

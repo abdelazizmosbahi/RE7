@@ -66,28 +66,23 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/CategorieAdmin" class="nav-link">
+                        <a href="/admin/categorie" class="nav-link">
                             <span data-key="t-dashboards">Gérer Catégorie</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/GestionRecette" class="nav-link">
+                        <a href="/admin/souscategorie" class="nav-link">
+                            <span data-key="t-dashboards" style=" color: orange;">Gérer Sous-Catégorie</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/consulter-list-recette" class="nav-link">
                             <span data-key="t-dashboards">Gérer Recette</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/MyReclamations" class="nav-link">
+                        <a href="/admin/rates" class="nav-link">
                             <span data-key="t-dashboards">Avis</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/CategorieUser" class="nav-link">
-                            <span data-key="t-dashboards">Recette</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/MesRecetteCons" class="nav-link">
-                            <span data-key="t-dashboards">Mes Recette</span>
                         </a>
                     </li>
                 </ul>
@@ -126,15 +121,15 @@
             </div>
             <div class="card-body">
                 {{-- <p><strong>Category Title:</strong> {{ $categorie->titre }}</p> --}}
-                <p><strong>Category Image:</strong></p>
+                <p><strong>Catégorie Image:</strong></p>
                 <img src="{{ asset('storage/' . $categorie->image) }}" alt="{{ $categorie->titre }}" width="200">
             </div>
              <!-- Display the timestamps -->
-             <p><strong>Created At:</strong> {{ $categorie->created_at }}</p>
-             <p><strong>Updated At:</strong> {{ $categorie->updated_at }}</p>
+             <p><strong>Créé à :</strong> {{ $categorie->created_at }}</p>
+             <p><strong>Mis à jour à ::</strong> {{ $categorie->updated_at }}</p>
             <h3>Sous-Catégories</h3>
             @if($categorie->sousCategories->isEmpty())
-                <p>This category has no sous-catégories.</p>
+                <p>Cette catégorie n'a pas de sous-catégories.</p>
             @else
                 <ul>
                     @foreach($categorie->sousCategories as $sousCategorie)
@@ -143,7 +138,7 @@
                 </ul>
             @endif
         </div>
-        <a href="{{ route('categorie.index') }}" class="btn btn-primary mt-3">Back to List</a>
+        <a href="{{ route('categorie.index') }}" class="btn btn-primary mt-3">Retour à la liste</a>
 
     </div>
 

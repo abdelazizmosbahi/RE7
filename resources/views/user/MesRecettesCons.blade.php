@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/icons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/aos/aos.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.min.css') }}">
-    <title>Admin - Manage Categories</title>
+    <title>consulter mes recettes</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -56,38 +56,29 @@
                 <ul class="navbar-nav" id="navbar-nav">
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                     <li class="nav-item">
-                        <a href="" class="nav-link">
+                        <a href="/userhome" class="nav-link">
                             <span data-key="t-dashboards">Dashboards</span>
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a href="" class="nav-link">
-                            <span data-key="t-dashboards">Utilisateurs</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/CategorieAdmin" class="nav-link">
-                            <span data-key="t-dashboards">Gérer Catégorie</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/GestionRecette" class="nav-link">
+                        <a href="modifierrecette" class="nav-link">
                             <span data-key="t-dashboards">Gérer Recette</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/MyReclamations" class="nav-link">
+                        <a href="#" class="nav-link">
                             <span data-key="t-dashboards">Avis</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/CategorieUser" class="nav-link">
+                        <a href="#" class="nav-link">
                             <span data-key="t-dashboards">Recette</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/MesRecetteCons" class="nav-link">
-                            <span data-key="t-dashboards">Mes Recette</span>
+                        <a href="#" class="nav-link">
+                            <span data-key="t-dashboards"  style=" color: orange;" >Mes Recette</span>
                         </a>
                     </li>
                 </ul>
@@ -109,7 +100,7 @@
                         <div class="row mt-4">
                             <!-- Accepted Recipes -->
                             <div class="col-12 mb-3">
-                                <h4>Accepted Recipes</h4>
+                                <h4>Recettes acceptées</h4>
                                 @if($accepted->count() > 0)
                                     <table class="table">
                                         <thead>
@@ -123,21 +114,21 @@
                                                 <tr>
                                                     <td>{{ $recette->titre }}</td>
                                                     <td>
-                                                        <a href="{{ route('recette.detail', $recette->id) }}" class="btn btn-info btn-sm">View</a>
-                                                        <a href="{{ route('recette.edit', $recette->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                                        <a href="{{ route('recette.detail', $recette->id) }}" class="btn btn-info btn-sm">Voir</a>
+                                                        <a href="{{ route('recette.edit', $recette->id) }}" class="btn btn-warning btn-sm">Modifier</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 @else
-                                    <p>No accepted recipes found.</p>
+                                    <p>Aucune recette acceptée trouvée.</p>
                                 @endif
                             </div>
                     
                             <!-- In Progress Recipes -->
                             <div class="col-12 mb-3">
-                                <h4>In Progress Recipes</h4>
+                                <h4>Recettes en cours</h4>
                                 @if($enCours->count() > 0)
                                     <table class="table">
                                         <thead>
@@ -151,21 +142,21 @@
                                                 <tr>
                                                     <td>{{ $recette->titre }}</td>
                                                     <td>
-                                                        <a href="{{ route('recette.detail', $recette->id) }}" class="btn btn-info btn-sm">View</a>
-                                                        <a href="{{ route('recette.edit', $recette->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                                        <a href="{{ route('recette.detail', $recette->id) }}" class="btn btn-info btn-sm">Voir</a>
+                                                        <a href="{{ route('recette.edit', $recette->id) }}" class="btn btn-warning btn-sm">Modifier</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 @else
-                                    <p>No in-progress recipes found.</p>
+                                    <p>Aucune recette en cours trouvée.</p>
                                 @endif
                             </div>
                     
                             <!-- Refused Recipes -->
                             <div class="col-12 mb-3">
-                                <h4>Refused Recipes</h4>
+                                <h4>Recettes refusées</h4>
                                 @if($refused->count() > 0)
                                     <table class="table">
                                         <thead>
@@ -179,15 +170,15 @@
                                                 <tr>
                                                     <td>{{ $recette->titre }}</td>
                                                     <td>
-                                                        <a href="{{ route('recette.detail', $recette->id) }}" class="btn btn-info btn-sm">View</a>
-                                                        <a href="{{ route('recette.edit', $recette->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                                        <a href="{{ route('recette.detail', $recette->id) }}" class="btn btn-info btn-sm">Voir</a>
+                                                        <a href="{{ route('recette.edit', $recette->id) }}" class="btn btn-warning btn-sm">Modifier</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 @else
-                                    <p>No refused recipes found.</p>
+                                    <p>aucune recette refusée trouvée.</p>
                                 @endif
                             </div>
                         </div>

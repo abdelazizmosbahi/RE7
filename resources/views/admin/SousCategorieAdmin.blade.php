@@ -67,28 +67,23 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/SousCategorieAdmin" class="nav-link">
-                            <span data-key="t-dashboards">Gérer Sous-Catégorie</span>
+                        <a href="/admin/categorie" class="nav-link">
+                            <span data-key="t-dashboards">Gérer Catégorie</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/GestionRecette" class="nav-link">
+                        <a href="/admin/souscategorie" class="nav-link">
+                            <span data-key="t-dashboards" style=" color: orange;">Gérer Sous-Catégorie</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/consulter-list-recette" class="nav-link">
                             <span data-key="t-dashboards">Gérer Recette</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/MyReclamations" class="nav-link">
+                        <a href="/admin/rates" class="nav-link">
                             <span data-key="t-dashboards">Avis</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/SousCategorieUser" class="nav-link">
-                            <span data-key="t-dashboards">Recette</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/MesRecetteCons" class="nav-link">
-                            <span data-key="t-dashboards">Mes Recette</span>
                         </a>
                     </li>
                 </ul>
@@ -121,7 +116,7 @@
                 @csrf
                 @method('PUT')
                 <div class="modal-header">
-                    <h5 class="modal-title" id="updateSousCategorieModalLabel">Update Sous-Catégorie</h5>
+                    <h5 class="modal-title" id="updateSousCategorieModalLabel">Modifier Sous-Catégorie</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -129,7 +124,7 @@
                     
                     <!-- Sous-Catégorie Title -->
                     <div class="mb-3">
-                        <label for="update-sous-categorie-title" class="form-label">Title</label>
+                        <label for="update-sous-categorie-title" class="form-label">Titre</label>
                         <input type="text" class="form-control" id="update-sous-categorie-title" name="titre" required>
                     </div>
 
@@ -148,8 +143,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Mise à jour</button>
                 </div>
             </form>
         </div>
@@ -161,16 +156,16 @@
     <div class="modal-dialog" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="deleteModalLabel">Delete Sous-Catégorie</h5>
+          <h5 class="modal-title" id="deleteModalLabel">Supprimer Sous-Catégorie</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Are you sure you want to delete this Sous-Catégorie?
-          <input type="hidden" id="delete-id">
+            Êtes-vous sûr de vouloir supprimer cette sous-catégorie ?
+            <input type="hidden" id="delete-id">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-danger" id="confirm-delete-btn">Delete</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-danger" id="confirm-delete-btn">Supprimer</button>
         </div>
       </div>
     </div>
@@ -304,7 +299,7 @@ function fetchSousCategories() {
                     // Category title below the sous-categorie title
                     const categoryTitle = document.createElement('span');
                     categoryTitle.className = 'text-muted mt-2'; // Add margin to the top of category title
-                    categoryTitle.textContent = 'Category: ' + sousCategorie.categorie_title; // Assuming the related category title is available as `categorie_title`
+                    categoryTitle.textContent = '' + sousCategorie.categorie_title; // Assuming the related category title is available as `categorie_title`
 
                     // Append image and titles to the titleDiv
                     titleDiv.appendChild(title);
@@ -322,14 +317,14 @@ function fetchSousCategories() {
                     // Add delete button
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'btn btn-danger btn-sm';
-                    deleteButton.textContent = 'Delete';
+                    deleteButton.textContent = 'Supprimer';
                     deleteButton.addEventListener('click', () => showDeleteModal(sousCategorie.id));
                     listItem.appendChild(deleteButton);
 
                     // Add update button
                     const updateButton = document.createElement('button');
                     updateButton.className = 'btn btn-warning btn-sm ms-2'; // Add margin to the left of the update button
-                    updateButton.textContent = 'Update';
+                    updateButton.textContent = 'Modifier';
                     updateButton.addEventListener('click', () => showUpdateSousCategorieModal(sousCategorie)); // Use the correct function here
                     listItem.appendChild(updateButton);
 

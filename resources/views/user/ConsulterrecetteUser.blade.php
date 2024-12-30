@@ -55,37 +55,28 @@
                 <ul class="navbar-nav" id="navbar-nav">
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                     <li class="nav-item">
-                        <a href="" class="nav-link">
-                            <span data-key="t-dashboards">Dashboards</span>
+                        <a href="/userhome" class="nav-link">
+                            <span data-key="t-dashboards" style=" color: orange;" >Dashboards</span>
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a href="" class="nav-link">
-                            <span data-key="t-dashboards">Utilisateurs</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/CategorieAdmin" class="nav-link">
-                            <span data-key="t-dashboards">Gérer Catégorie</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/GestionRecette" class="nav-link">
+                        <a href="modifierrecette" class="nav-link">
                             <span data-key="t-dashboards">Gérer Recette</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/MyReclamations" class="nav-link">
+                        <a href="#" class="nav-link">
                             <span data-key="t-dashboards">Avis</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/CategorieUser" class="nav-link">
+                        <a href="#" class="nav-link">
                             <span data-key="t-dashboards">Recette</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/MesRecetteCons" class="nav-link">
+                        <a href="#" class="nav-link">
                             <span data-key="t-dashboards">Mes Recette</span>
                         </a>
                     </li>

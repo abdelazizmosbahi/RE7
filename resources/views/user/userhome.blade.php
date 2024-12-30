@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/icons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/aos/aos.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.min.css') }}">
-    <title>Admin - Manage Categories</title>
+    <title>Dashboard - userhome</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <!-- Bootstrap JS -->
@@ -58,43 +58,35 @@
                 <ul class="navbar-nav" id="navbar-nav">
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                     <li class="nav-item">
-                        <a href="" class="nav-link">
-                            <span data-key="t-dashboards">Dashboards</span>
+                        <a href="/userhome" class="nav-link">
+                            <span data-key="t-dashboards" style=" color: orange;" >Dashboards</span>
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a href="" class="nav-link">
-                            <span data-key="t-dashboards">Utilisateurs</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/CategorieAdmin" class="nav-link">
-                            <span data-key="t-dashboards">Gérer Catégorie</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/GestionRecette" class="nav-link">
+                        <a href="modifierrecette" class="nav-link">
                             <span data-key="t-dashboards">Gérer Recette</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/MyReclamations" class="nav-link">
+                        <a href="#" class="nav-link">
                             <span data-key="t-dashboards">Avis</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/CategorieUser" class="nav-link">
+                        <a href="#" class="nav-link">
                             <span data-key="t-dashboards">Recette</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/MesRecetteCons" class="nav-link">
-                            <span data-key="t-dashboards">Mes Recette</span>
+                        <a href="/user/consulter-list-recette" class="nav-link">
+                            <span data-key="t-dashboards">Mes Recettes</span>
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
+        
         <div class="sidebar-background"></div>
     </div>
     <div class="main-content">
@@ -104,7 +96,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">userhome</h4>
+                            <h4 class="mb-sm-0">tous les recettes</h4>
                         </div>
                     </div>
                     
@@ -147,20 +139,20 @@
                                                                                     @endif
                                                                                 @endfor
                                                                             @else
-                                                                                <span>(No ratings)</span>
+                                                                                <span>(Aucune note)</span>
                                                                             @endif
                                                                         </span>
                                                                     </div>
-                                                                    <div class="card-body">
+                                                                    <div class="card-body" style="height: 310px; width 300px;">
                                                                         <!-- Display Recette Image -->
-                                                                        <p><strong>Recipe Image:</strong></p>
-                                                                        <img src="{{ asset('storage/' . $recette->image) }}" alt="{{ $recette->titre }}" width="200">
-                    
+                                                                        {{-- <p><strong>Image:</strong></p> --}}
+                                                                        <img src="{{ asset('storage/' . $recette->image) }}" alt="{{ $recette->titre }}" width="220px" height="120px">
+                                                                        <p>  </p>
                                                                         <p class="card-text"><strong>Ingrédients:</strong> {{ $recette->ingredients }}</p>
-                                                                        <p class="card-text"><strong>Method:</strong> {{ $recette->methode_preparation }}</p>
+                                                                        <p class="card-text"><strong>Method de préparation:</strong> {{ $recette->methode_preparation }}</p>
                                                                     </div>
                                                                     <div class="card-footer">
-                                                                        <a href="{{ route('recette.details', $recette->id) }}" class="btn btn-info btn-sm">View Details</a>
+                                                                        <a href="{{ route('recette.details', $recette->id) }}" class="btn btn-info btn-sm">Afficher les détails</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -168,11 +160,11 @@
                                                     @endforeach
                                                 </div>
                                             @else
-                                                <p>No recipes found in this subcategory.</p>
+                                                <p>Aucune recette trouvée dans cette sous-catégorie.</p>
                                             @endif
                                         @endforeach
                                     @else
-                                        <p>No subcategories found for this category.</p>
+                                        <p>Aucune sous-catégorie trouvée pour cette catégorie.</p>
                                     @endif
                                 </div>
                             @endforeach

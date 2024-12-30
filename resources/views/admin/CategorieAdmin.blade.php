@@ -66,28 +66,23 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/CategorieAdmin" class="nav-link">
-                            <span data-key="t-dashboards">Gérer Catégorie</span>
+                        <a href="/admin/categorie" class="nav-link">
+                            <span data-key="t-dashboards" style=" color: orange;">Gérer Catégorie</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/GestionRecette" class="nav-link">
+                        <a href="/admin/souscategorie" class="nav-link">
+                            <span data-key="t-dashboards" >Gérer Sous-Catégorie</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/consulter-list-recette" class="nav-link">
                             <span data-key="t-dashboards">Gérer Recette</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/MyReclamations" class="nav-link">
+                        <a href="/admin/rates" class="nav-link">
                             <span data-key="t-dashboards">Avis</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/CategorieUser" class="nav-link">
-                            <span data-key="t-dashboards">Recette</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/MesRecetteCons" class="nav-link">
-                            <span data-key="t-dashboards">Mes Recette</span>
                         </a>
                     </li>
                 </ul>
@@ -119,13 +114,13 @@
           @csrf
           @method('PUT')
           <div class="modal-header">
-            <h5 class="modal-title" id="updateModalLabel">Update Category</h5>
+            <h5 class="modal-title" id="updateModalLabel">Modifier catégorie</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <input type="hidden" id="update-id" name="id">
             <div class="mb-3">
-              <label for="update-title" class="form-label">Title</label>
+              <label for="update-title" class="form-label">Titre</label>
               <input type="text" class="form-control" id="update-title" name="titre" required>
             </div>
             <div class="mb-3">
@@ -134,8 +129,8 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            <button type="submit" class="btn btn-primary">Mise à jour</button>
           </div>
         </form>
       </div>
@@ -146,16 +141,16 @@
     <div class="modal-dialog" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="deleteModalLabel">Delete Category</h5>
+          <h5 class="modal-title" id="deleteModalLabel">Supprimer la catégorie</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Are you sure you want to delete this category?
+            Êtes-vous sûr de vouloir supprimer cette catégorie ?
           <input type="hidden" id="delete-id">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-danger" id="confirm-delete-btn">Delete</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-danger" id="confirm-delete-btn">Supprimer</button>
         </div>
       </div>
     </div>
@@ -195,7 +190,7 @@
                                 </div>
                                 <button type="submit" class="btn btn-warning" style="float: right; margin-top: 10px;">Ajouter</button>
                             </form><br>
-                                <div id="add-success-message" class="mt-3" style="display:none; color:green;">Category added successfully!</div>
+                                <div id="add-success-message" class="mt-3" style="display:none; color:green;">Catégorie ajoutée avec succès !</div>
                             </div>
                         </div>
                     </div>
@@ -277,14 +272,14 @@ function fetchCategories() {
                     // Add delete button
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'btn btn-danger btn-sm';
-                    deleteButton.textContent = 'Delete';
+                    deleteButton.textContent = 'Supprimer';
                     deleteButton.addEventListener('click', () => showDeleteModal(category.id));
                     listItem.appendChild(deleteButton);
 
                     // Add update button
                     const updateButton = document.createElement('button');
                     updateButton.className = 'btn btn-warning btn-sm ms-2'; // Add margin to the left of the update button
-                    updateButton.textContent = 'Update';
+                    updateButton.textContent = 'Modifier';
                     updateButton.addEventListener('click', () => showUpdateModal(category));
                     listItem.appendChild(updateButton);
 

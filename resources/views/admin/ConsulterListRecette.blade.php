@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/icons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/aos/aos.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.min.css') }}">
-    <title>Admin - Manage Categories</title>
+    <title>Admin gerer recette</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -86,28 +86,23 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/CategorieAdmin" class="nav-link">
+                        <a href="/admin/categorie" class="nav-link">
                             <span data-key="t-dashboards">Gérer Catégorie</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/GestionRecette" class="nav-link">
-                            <span data-key="t-dashboards">Gérer Recette</span>
+                        <a href="/admin/souscategorie" class="nav-link">
+                            <span data-key="t-dashboards" >Gérer Sous-Catégorie</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/MyReclamations" class="nav-link">
+                        <a href="/admin/consulter-list-recette" class="nav-link">
+                            <span data-key="t-dashboards" style=" color: orange;">Gérer Recette</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/rates" class="nav-link">
                             <span data-key="t-dashboards">Avis</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/CategorieUser" class="nav-link">
-                            <span data-key="t-dashboards">Recette</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/MesRecetteCons" class="nav-link">
-                            <span data-key="t-dashboards">Mes Recette</span>
                         </a>
                     </li>
                 </ul>

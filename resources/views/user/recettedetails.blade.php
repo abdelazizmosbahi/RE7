@@ -59,43 +59,34 @@
                 <ul class="navbar-nav" id="navbar-nav">
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                     <li class="nav-item">
-                        <a href="" class="nav-link">
+                        <a href="/userhome" class="nav-link">
                             <span data-key="t-dashboards">Dashboards</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link">
-                            <span data-key="t-dashboards">Utilisateurs</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/CategorieAdmin" class="nav-link">
-                            <span data-key="t-dashboards">Gérer Catégorie</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/GestionRecette" class="nav-link">
+                        <a href="#" class="nav-link">
                             <span data-key="t-dashboards">Gérer Recette</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/MyReclamations" class="nav-link">
+                        <a href="#" class="nav-link" style=" color: orange;">
                             <span data-key="t-dashboards">Avis</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/CategorieUser" class="nav-link">
+                        <a href="#" class="nav-link">
                             <span data-key="t-dashboards">Recette</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/MesRecetteCons" class="nav-link">
+                        <a href="#" class="nav-link">
                             <span data-key="t-dashboards">Mes Recette</span>
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
+        
         <div class="sidebar-background"></div>
     </div>
     {{-- <div class="main-content">
@@ -171,26 +162,26 @@
                                             @endif
                                         @endfor
                                     @else
-                                        <span>(No ratings yet)</span>
+                                        <span>(Aucune note pour l'instant)</span>
                                     @endif
                                 </span>
                             </div>
                             <div class="card-body">
                                 <img src="{{ asset('storage/' . $recette->image) }}" alt="{{ $recette->titre }}" width="200">
-
+<p></p>
                                 <p><strong>Ingrédients:</strong></p>
                                 <p>{{ $recette->ingredients }}</p>
-                                <p><strong>Method of Preparation:</strong></p>
+                                <p><strong>Methode de préparation:</strong></p>
                                 <p>{{ $recette->methode_preparation }}</p>
             
-                                <p><strong>Additional Info:</strong></p>
+                                <p><strong>Informations complémentaires:</strong></p>
                                 <p>{{ $recette->informations_complementaire }}</p>
             
-                                <p><strong>Created At:</strong> {{ $recette->created_at }}</p>
-                                <p><strong>Updated At:</strong> {{ $recette->updated_at }}</p>
+                                {{-- <p><strong>Created At:</strong> {{ $recette->created_at }}</p>
+                                <p><strong>Updated At:</strong> {{ $recette->updated_at }}</p> --}}
                             </div>
                             <div class="card-footer">
-                                <a href="/userhome" class="btn btn-primary">Back to List</a>
+                                <a href="/userhome" class="btn btn-primary">Retour à la liste</a>
                             </div>
                         </div>
                     </div>
@@ -199,7 +190,7 @@
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Rate This Recipe</h4>
+                                <h4>Évaluez cette recette</h4>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('rate.add') }}" method="POST">
@@ -208,7 +199,7 @@
             
                                     <!-- Stars Input -->
                                     <div class="mb-3">
-                                        <label class="form-label">Your Rating:</label>
+                                        <label class="form-label">Votre note :</label>
                                         <div class="rating" style="font-size: 1.5rem;">
                                             @for($i = 1; $i <= 5; $i++)
                                                 <input type="radio" id="star{{ $i }}" name="stars" value="{{ $i }}" style="display: none;" required>
@@ -221,12 +212,12 @@
             
                                     <!-- Comment -->
                                     <div class="mb-3">
-                                        <label for="comment" class="form-label">Comment (optional):</label>
+                                        <label for="comment" class="form-label">Commentaire (facultatif) :</label>
                                         <textarea id="comment" name="comment" class="form-control" rows="4"></textarea>
                                     </div>
             
                                     <!-- Submit Button -->
-                                    <button type="submit" class="btn btn-success">Submit Rating</button>
+                                    <button type="submit" class="btn btn-success">Soumettre</button>
                                 </form>
                             </div>
                         </div>
@@ -238,11 +229,11 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Comments</h4>
+                                <h4>Commentaires</h4>
                             </div>
                             <div class="card-body">
                                 @if($approvedRates->isEmpty() || $approvedRates->every(fn($rate) => is_null($rate->comment) || $rate->comment === ''))
-                                    <p>No comments yet for this recipe.</p>
+                                    <p>Pas encore de commentaires pour cette recette.</p>
                                 @else
                                     @foreach($approvedRates as $rate)
                                         @if($rate->comment)  <!-- Display the comment if not null -->
@@ -251,7 +242,7 @@
                                                 <div class="d-flex align-items-center">
                                                     <i class="fas fa-user-circle fa-2x mr-2"></i>
                                                     <div>
-                                                        <p><strong>Comment:</strong> {{ $rate->comment }}</p>
+                                                        <p><strong>Commentaire:</strong> {{ $rate->comment }}</p>
                                                     </div>
                                                 </div>
                                             </div>
